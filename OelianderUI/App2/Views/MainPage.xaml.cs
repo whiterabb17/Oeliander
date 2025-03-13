@@ -86,13 +86,6 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         //_scanResults = scanResultService;
         InitializeComponent();
         DataContext = this;
-        rosVersion = new List<string>()
-        {
-            "6.30",
-            "6.31",
-            "6.32"
-        };
-        LoadOsVersions();
         helperObject = new ScanHelper(AddLog, false, this) { debugMod = false };
     }
     public void ScanStop()
@@ -179,18 +172,6 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
             helperObject.HandleException(E);
         }
     }
-    private void LoadOsVersions()
-    {
-        try
-        {
-            routerVersion.ItemsSource = rosVersion;
-            routerVersion.Items.Refresh();
-        }
-        catch (Exception E)
-        {
-            helperObject.HandleException(E);
-        }
-    }
 
     public async void OnNavigatedTo(object parameter)
     {
@@ -234,9 +215,8 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         if (ShodanScan == true)
         {
             ShodanScan = false;
-            routerVersion.Visibility = System.Windows.Visibility.Hidden;
-            ROSTextBlock.Visibility = System.Windows.Visibility.Hidden;
-            TargetTextBox.IsEnabled = true;
+            targetLabel.Text = "Target(s)";
+            fileSelect.IsEnabled = true;
         }
         //else
         //{
@@ -252,9 +232,8 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         if (ShodanScan == false)
         {
             ShodanScan = true;
-            routerVersion.Visibility = System.Windows.Visibility.Visible;
-            ROSTextBlock.Visibility = System.Windows.Visibility.Visible;
-            TargetTextBox.IsEnabled = false;
+            targetLabel.Text = "Router Version: (Affected Versions: 6.29-6.42)";
+            fileSelect.IsEnabled = false;
         }
         //else
         //{
@@ -294,7 +273,7 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
             GC.Collect();
             GC.WaitForPendingFinalizers();
             if (ShodanScan)
-                helperObject.Start(ShodanScan, routerVersion.SelectedItem.ToString());
+                helperObject.Start(ShodanScan, TargetTextBox.Text);
             else
             {
                 if (_targetingString == "")

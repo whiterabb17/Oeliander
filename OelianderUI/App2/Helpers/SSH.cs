@@ -49,7 +49,7 @@ public class SSH
 
 public static class ServerExtensions
 {
-    #region MainWindow Connection Logic
+    #region General Logic
     public static bool TryConnect(this SSH ssh, int window)
     {
         try
@@ -142,8 +142,25 @@ public static class ServerExtensions
             
         }
     }
-    #endregion MainWindow Connection Logic
-    #region TerminalWindow Connection Logic
+
+    public static string SendFile(string hostname, string username, string password, string localFilePath, string remoteFilePath = "/tmp")
+    {
+        try
+        {
+            var scpClient = new ScpClient(hostname, username, password);
+            scpClient.Connect();
+            // Send the file using SCP
+            var fileStream = System.IO.File.OpenRead(localFilePath);
+            scpClient.Upload(fileStream, remoteFilePath);
+            return "File uploaded successfully.";            
+        }
+        catch (Exception ex)
+        {
+            return ex.Message;
+        }
+    }
+    #endregion General Logic
+    #region TerminalWindow Command Logic
     public static void SendCMD(this SSH ssh, string cmd, TerminalPage termWindow)
     {
         term = termWindow;

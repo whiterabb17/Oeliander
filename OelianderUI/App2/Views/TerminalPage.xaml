@@ -59,6 +59,18 @@
                 BorderThickness="2,2,2,2" 
                 Background="#FF5D5B5B" 
                 Foreground="#FF014D16" TextChanged="logRichTextBox_TextChanged">
+                <RichTextBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem
+                            x:Name="upAndExc"
+                            Click="UploadFileToTarget"
+                            Header="Upload File">
+                            <MenuItem.Icon>
+                                <Image Source="/Assets/upload.png" ></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </RichTextBox.ContextMenu>
             </RichTextBox>
             <TextBox
                 Grid.Row="4"
@@ -68,7 +80,7 @@
                 Grid.RowSpan="1" 
                 Grid.ColumnSpan="1" KeyDown="commandText_KeyDown"/>
             <DataGrid
-                x:Name="userGrid"
+                x:Name="termGrid"
                 Grid.Row="3"
                 Grid.Column="3"
                 Grid.RowSpan="2" SelectedCellsChanged="userGrid_SelectedCellsChanged_1"

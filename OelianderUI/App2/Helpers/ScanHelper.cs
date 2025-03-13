@@ -178,8 +178,8 @@ public class ScanHelper
                     });
                 }
                 break;
-            case "backdoor":
-                /*
+            case "rosbackdoor":
+                /* 
                  * Code Not Yet Test So Not Yet Implemented
                  *
                  
@@ -246,6 +246,7 @@ public class ScanHelper
                 break;
         }
     }
+
     
     public string GetTime()
     {
@@ -467,7 +468,7 @@ public class ScanHelper
         }
         catch (Exception ex)
         {
-            var dialogWindow = new ShellDialogWindow("Exploit Failed", ex.Message, true);
+            var dialogWindow = new ShellDialogWindow("Exploit Failed", ex.Message, 2);
             dialogWindow.ShowDialog();
         }
     }
@@ -542,7 +543,7 @@ public class ScanHelper
         catch (Exception E)
         {
             HandleException(E);
-            var dialogWindow = new ShellDialogWindow("Scan Error", E.Message, true);
+            var dialogWindow = new ShellDialogWindow("Scan Error", E.Message, 2);
             dialogWindow.ShowDialog();
         }
     }
@@ -562,7 +563,7 @@ public class ScanHelper
             catch (Exception ex)
             {
                 mainFormObject.AddLog(ex.ToString());
-                var dialogWindow = new ShellDialogWindow("Error", ex.Message, false);
+                var dialogWindow = new ShellDialogWindow("Error", ex.Message, 1);
                 dialogWindow.ShowDialog();
             }
         }

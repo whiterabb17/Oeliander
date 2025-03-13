@@ -20,6 +20,7 @@
         <TextBlock
             Style="{StaticResource PageTitleStyle}"
             Margin="24,0,0,0"
+            x:Name="targetLabel"
             Text="{x:Static properties:Resources.MainPageTitle}" 
             Grid.ColumnSpan="2" 
             Height="30" 
@@ -28,16 +29,16 @@
             Grid.Row="1" 
             Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="115*"/>
-                <RowDefinition Height="287*"/>
+                <RowDefinition Height="27*"/>
+                <RowDefinition Height="107*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="197*"/>
-                <ColumnDefinition Width="203*"/>
+                <ColumnDefinition Width="387*"/>
+                <ColumnDefinition Width="413*"/>
             </Grid.ColumnDefinitions>
             <TextBlock
                 Text="Target(s):" 
-                Margin="9,2,275,0" 
+                Margin="9,10,275,0" 
                 FontSize="18" 
                 Height="34" 
                 VerticalAlignment="Top" />
@@ -45,15 +46,15 @@
                 x:Name="TargetTextBox" 
                 Height="30" 
                 VerticalAlignment="Top" 
-                Margin="10,36,12,0" />
+                Margin="9,40,5,0" />
             <Button 
                 x:Name="fileSelect"
-                Margin="0,36,281,0" 
+                Margin="0,41,281,0" 
                 Content="Select" 
                 Height="30" 
                 VerticalAlignment="Top" 
                 Click="fileSelect_Click" 
-                Grid.Column="1" />
+                Grid.Column="1" RenderTransformOrigin="0.505,1.354" />
             <RadioButton
                 x:Name="ManualScanButton"
                 Content="Manual Scan" 
@@ -75,7 +76,7 @@
                 Grid.Row="1"
                 x:Name="LogBox"
                 IsReadOnly="True" 
-                Margin="10,0,10,10"
+                Margin="7,0,5,10"
                 Background="#FF5D5B5B" 
                 Foreground="#FF186F00">
                 <RichTextBox.ContextMenu>
@@ -102,35 +103,18 @@
                             <MenuItem.Icon>
                                 <Image Source="/Assets/folderopen.png" ></Image>
                             </MenuItem.Icon>
-                        </MenuItem>/>
+                        </MenuItem> />
                     </ContextMenu>
                 </RichTextBox.ContextMenu>
             </RichTextBox>
-            <TextBlock
-                x:Name="ROSTextBlock"
-                Visibility="Hidden"
-                Text="RouterOS:" 
-                Margin="141,34,140,0" 
-                FontSize="18" 
-                Height="34" 
-                VerticalAlignment="Top" 
-                Grid.Column="1" />
-            <ComboBox
-                x:Name="routerVersion"
-                Grid.Column="1"
-                Height="22"
-                Margin="236,34,25,0"
-                VerticalAlignment="Top"
-                Visibility="Hidden" />
             <DataGrid
                 x:Name="userGrid"
-                Grid.Column="1"
                 Grid.Row="1"
                 AutoGenerateColumns="False"
                 GridLinesVisibility="Horizontal"
                 CanUserAddRows="False"
                 ItemsSource="{Binding Source}"
-                KeyboardNavigation.TabNavigation="Once" Margin="0,0,6,10" SelectedCellsChanged="userGrid_SelectedCellsChanged">
+                KeyboardNavigation.TabNavigation="Once" Margin="0,0,5,10" SelectedCellsChanged="userGrid_SelectedCellsChanged" Grid.Column="1">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Index}" Header="#" />
                     <DataGridTextColumn Binding="{Binding IPAddress}" Header="IPAddress" />
@@ -143,12 +127,16 @@
                         <MenuItem
                             x:Name="btwButton"
                             Click="AttemptBTW"
-                            Header="Try Install Backdoor">
+                            Header="Try Install BTW Backdoor"
+                            IsEnabled="False">
+                            <MenuItem.Icon>
+                                <Image Source="/Assets/btw.png" ></Image>
+                            </MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>
-            <Button x:Name="StartScanButton" Margin="241,67,30,0" Content="Start" Height="30" VerticalAlignment="Top" Click="StartScan" Grid.Column="1" />
+            <Button x:Name="StartScanButton" Margin="241,41,30,0" Content="Start" Height="30" VerticalAlignment="Top" Click="StartScan" Grid.Column="1" />
         </Grid>
     </Grid>
 </Page>

@@ -39,7 +39,7 @@ public partial class ShellWindow : MetroWindow, IShellWindow, INotifyPropertyCha
     // TODO: Change the icons and titles for all HamburgerMenuItems here.
     public ObservableCollection<HamburgerMenuItem> MenuItems { get; } = new ObservableCollection<HamburgerMenuItem>()
     {
-        new HamburgerMenuGlyphItem() { Label = Properties.Resources.ShellMainPage, Glyph = "\uE83D", TargetPageType = typeof(MainPage) },
+        new HamburgerMenuGlyphItem() { Label = Properties.Resources.ShellMainPage, Glyph = "\uE730", TargetPageType = typeof(MainPage) },
         new HamburgerMenuGlyphItem() { Label = Properties.Resources.ShellTerminalPage, Glyph = "\uE70C", TargetPageType = typeof(TerminalPage) },
     };
 

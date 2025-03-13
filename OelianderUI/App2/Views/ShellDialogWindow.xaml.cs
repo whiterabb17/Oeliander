@@ -13,14 +13,26 @@ public partial class ShellDialogWindow : MetroWindow, IShellDialogWindow
     public string DialogTextString { get; set; }
     private readonly string ExclamationGlyph = "\uE783";
     private readonly string WarningGlyph = "\uEB56";
+    private readonly string SuccessGlyph = "\uE73E";
 
-    public ShellDialogWindow(string heading, string text, bool warning)
+    public ShellDialogWindow(string heading, string text, int state)
     {
         InitializeComponent();
         DataContext = this;
         DialogHeadingString = heading;
         DialogTextString = text;
-        DialogIcon.Glyph = warning ? WarningGlyph : ExclamationGlyph;
+        switch (state)
+        {
+            case 0:
+                DialogIcon.Glyph = SuccessGlyph;
+                break;
+            case 1:
+                DialogIcon.Glyph = ExclamationGlyph;
+                break;
+            case 2:
+                DialogIcon.Glyph = WarningGlyph;
+                break;
+        }
     }
 
     public Frame GetDialogFrame()

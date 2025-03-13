@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
 using OelianderUI.Core.Models;
 using OelianderUI.Helpers;
 
@@ -24,10 +25,12 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
     public ObservableCollection<CollectionListing> CollectedTargets { get; } = new();
     public ScanHelper helperObject { get; set; }
     public List<string> collectedCredentials = new();
-    public List<string> rosVersion = new();
     public static Dictionary<User, string> _staticList = new();
-    public string ConnectionString { get; set; }
     public string CommandText { get; set; }
+    private string CurrentUser { get; set; }
+    private string CurrentIP { get; set; }
+    private string CurrentPassword { get; set; }
+    private bool _isConnected = false;
 
     #endregion locals
 
@@ -66,8 +69,7 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
         catch (Exception E)
         {
             helperObject.HandleException(E);
-            var dialogWindow = new ShellDialogWindow("Unable to Select Target", E.Message, false);
-            dialogWindow.ShowDialog();
+            ShowAlert("Unable to Select Target", E.Message, 1);
         }
     }
 
@@ -92,6 +94,7 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
         if (ssh.TryConnect(1))
         {
             ssh.SendCMD("whoami", this);
+            _isConnected = true;
         }
         else
         {
@@ -101,11 +104,40 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
     private void Button_Click(object sender, RoutedEventArgs e)
     {
         var args = CommandText.Trim(); // commandText.Text.Trim();
-        User User = new User(args.Split('@')[0], args.Split(':')[1]);
-        var a = args.Split('@')[1];
-        var ip = a.Split(':')[0];
-        StartSSHConnection(ip, User);
+        CurrentUser = args.Split('@')[0];
+        CurrentPassword = args.Split(':')[1];
+        CurrentIP = args.Split('@')[1].Split(':')[0];
+        User User = new User(CurrentUser, CurrentPassword);
+        StartSSHConnection(CurrentIP, User);
     }
+
+    private void ShowAlert(string title, string message, int state)
+    {
+        var dialogWindow = new ShellDialogWindow(title, message, state);
+        dialogWindow.ShowDialog();
+    }
+
+    private void UploadFileToTarget(object sender, RoutedEventArgs e)
+    {
+        if (!_isConnected)
+        {
+            ShowAlert("No Connection", "Must have a valid connection\nbefore attempting file uploads", 2);
+        }
+        else
+        {        
+            var op = new OpenFileDialog();
+            op.RestoreDirectory = true;
+            op.ShowDialog();
+            var localFilePath = op.FileName;
+            var result = ServerExtensions.SendFile(CurrentIP, CurrentUser, CurrentPassword, localFilePath);
+            AddResult(result);
+            var i = 0;
+            if (result.Contains("successful")) { i = 0; }
+            else { i = 2; }
+            ShowAlert("File Upload", result, i);
+        }
+    }
+
     private void logRichTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
     {
         try
@@ -133,9 +165,9 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
 
     private void userGrid_SelectedCellsChanged_1(object sender, SelectedCellsChangedEventArgs e)
     {
-        if (userGrid.CurrentItem != null)
+        if (termGrid.CurrentItem != null)
         {
-            CollectionListing selectedItem = (CollectionListing)userGrid.CurrentItem;
+            CollectionListing selectedItem = (CollectionListing)termGrid.CurrentItem;
             if (selectedItem != null)
             {
                 Dispatcher.Invoke(() => { connectionString.Text = $"{selectedItem.Username}@{selectedItem.IPAddress}:{selectedItem.Password}"; });
