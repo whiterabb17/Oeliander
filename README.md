@@ -7,6 +7,10 @@
 -- Allows for uploads to the target system <br>
 -- Allows for root backdoor install using MikroTik options package <br><br>
 
+- Shodan search integration <br>
+-- Allows for target collection and IP assessments using shodan <br><br>
+
+
 <p align="center">
 	<img align="center" src="https://raw.githubusercontent.com/whiterabb17/OelianderSource/master/Screenshot.png">
 </p>
