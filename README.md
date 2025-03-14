@@ -1,5 +1,13 @@
 # Oeliander
-MkCheck upgraded, Rewritten in .NET6 with some extra features
 
+## MikroTik Router Exploitation Kit
 
-[![Oeliander](https://i9.ytimg.com/vi_webp/S48ts0JH9JM/mqdefault.webp?v=62ed578d&sqp=CLSauZcG&rs=AOn4CLCC4dyw7EPjszMDhdvHHPPINA5log)](https://www.youtube.com/watch?v=S48ts0JH9JM)
+- WinBox Auth Bypass Credential Disclosure (CVE-2018-14847) <br>
+-- Allows direct SSH into the vulnerable device using collected credentials <br>
+-- Install a root backdoor on the infected device <br><br>
+
+<p align="center">
+	<img align="center" src="https://raw.githubusercontent.com/whiterabb17/OelianderSource/master/Screenshot.png">
+</p>
+
+<a href="https://github.com/whiterabb17/MkCheck">MkCheck</a> given an easy to use UI
