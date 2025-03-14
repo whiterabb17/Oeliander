@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OelianderUI", "OelianderUI.csproj", "{6313D5D8-F25B-4220-0FBF-7149A85E7C62}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OelianderUI", "Oeliander\OelianderUI.csproj", "{6313D5D8-F25B-4220-0FBF-7149A85E7C62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OelianderUI.Core", "..\App2.Core\OelianderUI.Core.csproj", "{26E4F3A2-8CE2-3747-88CB-FE00CB4096CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OelianderUI.Core", "Oeliander.Core\OelianderUI.Core.csproj", "{26E4F3A2-8CE2-3747-88CB-FE00CB4096CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

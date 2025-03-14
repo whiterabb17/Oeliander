@@ -64,8 +64,6 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         {
             _readWriteLock.ExitWriteLock();
         }
-        //try { Dispatcher.Invoke(() => System.IO.File.AppendAllText("Oeliander.log", text + Environment.NewLine)); }
-        //catch (Exception ex) { LogBox.AppendText(ex.Message); }
     }
     public void AddLog(string text, object obj)
     {
@@ -105,8 +103,6 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
             userGrid.ItemsSource = _collectionList;
             userGrid.Items.Refresh();
         });
-        //foreach (var item in _connections)
-        //    Dispatcher.Invoke(() => { userGrid.Items.Add(item); });
     }
     public void FillList(List<CollectionListing> _connections)
     {

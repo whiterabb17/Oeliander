@@ -1,6 +1,8 @@
-OelianderUI/App2/.vs
-OelianderUI/App2/bin
-OelianderUI/App2/obj
-OelianderUI/App2.Core/.vs
-OelianderUI/App2.Core/obj
-OelianderUI/App2.Core/bin
+Oeliander/Oeliander/.vs
+Oeliander/Oeliander/bin
+Oeliander/Oeliander/obj
+Oeliander/Oeliander.Core/.vs
+Oeliander/Oeliander.Core/obj
+Oeliander/Oeliander.Core/bin
+Oeliander/.vs
+utils/BuiltUtils

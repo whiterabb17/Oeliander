@@ -2,7 +2,7 @@
   
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <RootNamespace>OelianderUI</RootNamespace>
     <UseWPF>True</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -25,7 +25,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\App2.Core\OelianderUI.Core.csproj" />
+    <ProjectReference Include="..\Oeliander.Core\OelianderUI.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
