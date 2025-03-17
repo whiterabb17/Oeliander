@@ -98,14 +98,15 @@ catch (Exception ex)
 {
 Objects.obj.HandleException(ex);
 }
-        if (Objects.ssh.TryConnect(1))
-        {
-            Objects.ssh.SendCMD("whoami", 1);
-        }
-        else
-        {
-            Dispatcher.Invoke(() => { LogBox.AppendText($"[!] {GetTime()}: Connection to {ip} failed" + Environment.NewLine); });
-        }
+      //  if (Objects.ssh.TryConnect(1))
+      //  {
+      //      Objects.ssh.SendCMD("whoami", 1);
+      //  }
+      //  else
+      //  {
+      //      Dispatcher.Invoke(() => { 
+// LogBox.AppendText($"[!] {GetTime()}: Connection to {ip} failed" + Environment.NewLine); });
+//        }
     }
     private void Button_Click(object sender, RoutedEventArgs e)
     {
