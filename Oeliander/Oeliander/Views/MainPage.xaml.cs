@@ -49,7 +49,7 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         }
         catch (Exception E)
         {
-            helperObject.HandleException(E);
+            Objects.obj.HandleException(E);
         }
     }
     public void AddToLogFile(string text)
@@ -71,14 +71,14 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
     {
         try
         {
-            Dispatcher.Invoke(() => 
+            Dispatcher.Invoke(() =>
             {
                 LogBox.AppendText(text + Environment.NewLine);
             });
         }
         catch (Exception E)
         {
-            helperObject.HandleException(E);
+            Objects.obj.HandleException(E);
         }
     }
     public MainPage() //IScanResultService scanResultService)
@@ -95,8 +95,8 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         Dispatcher.Invoke(() =>
         {
             StartScanButton.Content = "Start";
-            AddLog(Environment.NewLine + helperObject.GetTime() + ": Scan stopped successfully\n");
-            AddToLogFile("\n\n\t[*] End of Scan: " + helperObject.GetTime() + "\n\n###############################################################################\n\n");
+            AddLog(Environment.NewLine + Objects.GetTime() + ": Scan stopped successfully\n");
+            AddToLogFile("\n\n\t[*] End of Scan: " + Objects.GetTime() + "\n\n###############################################################################\n\n");
         });
     }
     public void FillList()
@@ -135,7 +135,7 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         }
         catch (Exception E)
         {
-            helperObject.HandleException(E);
+            Objects.obj.HandleException(E);
         }
     }
     public void AddCred(List<Helpers.User> _uList, string _ip, string status = "Unauthenticated")
@@ -162,7 +162,7 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         }
         catch (Exception E)
         {
-            helperObject.HandleException(E);
+            Objects.obj.HandleException(E);
         }
     }
 
@@ -313,17 +313,8 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
 
     private void ExportNewList(object sender, RoutedEventArgs e)
     {
-        var dialogWindow = new ShellDialogWindow("Save Target List", "Please enter a name for the new list", 0, true);
-        dialogWindow.ShowDialog();
-        if (dialogWindow.DialogReturnText != "")
-        {
-            File.WriteAllText(dialogWindow.DialogReturnText + ".json", JsonConvert.SerializeObject(_collectionList));
-        }
-        else
-        {
-            File.WriteAllText("list.json", JsonConvert.SerializeObject(_collectionList));
-        }
-        dialogWindow.Close();
+        var fileName = Objects.obj.OpenDialogWindowWithResult("Save Target List", "Please enter a name for the new list");
+        File.WriteAllText(fileName + ".json", JsonConvert.SerializeObject(_collectionList));
     }
 
     private void ImportList(object sender, RoutedEventArgs e)

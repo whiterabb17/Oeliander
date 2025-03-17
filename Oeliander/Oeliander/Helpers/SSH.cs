@@ -89,6 +89,10 @@ public static class ServerExtensions
                 case 1:
                     term.SessionResult($"{ssh.Username}@{ssh.IP}: {ex.Message}");
                     break;
+                case 2:
+                    var dialogResult = new ShellDialogWindow("Error", $"{ssh.Username}@{ssh.IP}: {ex.Message}", 1, false);
+                    dialogResult.ShowDialog();
+                    break;
             }
             return false;
         }
@@ -114,6 +118,10 @@ public static class ServerExtensions
                     break;
                 case 1:
                     term.AddResult($"ERROR: {ssh.Username}@{ssh.IP} {ex.Message}");
+                    break;
+                case 2:
+                    var dialogResult = new ShellDialogWindow("Error", $"{ssh.Username}@{ssh.IP}: {ex.Message}", 1, false);
+                    dialogResult.ShowDialog();
                     break;
             }            
         }
@@ -142,6 +150,9 @@ public static class ServerExtensions
                             break;
                         case 1:
                             term.AddResult($"{ssh.Username}@{ssh.IP}: {content.Replace("\n","")}");
+                            break;
+                        case 2:
+                            Objects.dirViewer.SortData(content);
                             break;
                     }                    
                 }

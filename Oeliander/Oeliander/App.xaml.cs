@@ -79,6 +79,8 @@ public partial class App : Application
 
         services.AddTransient<TerminalPage>();
 
+        services.AddTransient<DirectoryViewPage>();
+
         services.AddTransient<SettingsPage>();
 
         services.AddTransient<IShellDialogWindow, ShellDialogWindow>();
