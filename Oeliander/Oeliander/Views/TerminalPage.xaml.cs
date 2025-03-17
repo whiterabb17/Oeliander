@@ -87,6 +87,17 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
     public void StartSSHConnection(string ip, User user)
     {
         Objects.ssh = new SSH(ip, user.Username, user.Password);
+try 
+{
+Objects.ssh.Connect();
+var output = ssh.CreateCommand("whoami");
+var result = ssh.Execute();
+AddResult(result);
+}
+catch (Exception ex)
+{
+Objects.obj.HandleException(ex);
+}
         if (Objects.ssh.TryConnect(1))
         {
             Objects.ssh.SendCMD("whoami", 1);
