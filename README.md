@@ -12,7 +12,7 @@
 
 
 <p align="center">
-	<img align="center" src="https://raw.githubusercontent.com/whiterabb17/OelianderSource/master/Screenshot.png">
+	<img align="center" src="https://raw.githubusercontent.com/whiterabb17/Oeliander/master/Screenshot.png">
 </p>
 
 <a href="https://github.com/whiterabb17/MkCheck">MkCheck</a> given an easy to use UI
