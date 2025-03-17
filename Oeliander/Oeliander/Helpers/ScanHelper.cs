@@ -44,10 +44,9 @@ public class ScanHelper
     public static int carryon = 0;
     #endregion Locals
     
-    public ScanHelper(Action<string, object> objLogger, bool needInvoke, MainPage main)
+    public ScanHelper(bool needInvoke, MainPage main)
     {
         mainFormObject = main;
-        logger = objLogger;
         loggerInvoke = needInvoke;
     }
 
@@ -160,7 +159,7 @@ public class ScanHelper
             default:
                 if (ssh.TryConnect(0))
                 {
-                    ssh.SendCMD(command, mainFormObject);
+                    ssh.SendCMD(command, 0);
                     mainFormObject.Dispatcher.Invoke(() =>
                     {
                         mainFormObject.AddLog($"[+] SUCCESS: '{user.Username}@{ip}' using password: {user.Password}\n-------------------------------\n");

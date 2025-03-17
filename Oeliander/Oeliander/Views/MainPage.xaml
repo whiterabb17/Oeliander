@@ -133,6 +133,33 @@
                                 <Image Source="/Assets/btw.png" ></Image>
                             </MenuItem.Icon>
                         </MenuItem>
+                        <MenuItem
+                            x:Name="exportList"
+                            Click="ExportToList"
+                            Header="Export Target List"
+                            IsEnabled="True">
+                            <MenuItem.Icon>
+                                <Image Source="/Assets/btw.png" ></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem
+                            x:Name="exportNewList"
+                            Click="ExportNewList"
+                            Header="Export New List"
+                            IsEnabled="True">
+                            <MenuItem.Icon>
+                                <Image Source="/Assets/btw.png" ></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem
+                                x:Name="importList"
+                                Click="ImportList"
+                                Header="Import Target List"
+                                IsEnabled="True">      
+                            <MenuItem.Icon>
+                                <Image Source="/Assets/btw.png" ></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>

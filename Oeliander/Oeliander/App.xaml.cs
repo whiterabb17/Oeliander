@@ -14,6 +14,7 @@ using OelianderUI.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OelianderUI.Helpers;
 
 namespace OelianderUI;
 
@@ -88,6 +89,9 @@ public partial class App : Application
 
     private async void OnExit(object sender, ExitEventArgs e)
     {
+        try { if (Objects.ssh.Client.IsConnected) { Objects.ssh.Client.Disconnect(); } }
+        catch (Exception ex) 
+        { File.AppendAllText("Oeliander.log", ex.Message); }
         await _host.StopAsync();
         _host.Dispose();
         _host = null;

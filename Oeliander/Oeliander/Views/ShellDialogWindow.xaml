@@ -21,24 +21,41 @@
                 x:Name="DialogIcon"
                 FontSize="48"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top" Margin="10,43,0,0" Width="59" />       
+                VerticalAlignment="Top" Margin="10,43,0,0" Width="59" />
             <TextBlock
                 x:Name="DialogHeading"
-                Text="{Binding DialogHeadingString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,44,0,131"
+                Text="{Binding DialogHeadingString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,27,0,148"
                 TextAlignment="Center"
                 FontSize="24px" />
             <TextBlock
                 x:Name="DialogText"
                 Text="{Binding DialogTextString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 FontSize="18px"
-                TextAlignment="Center" Margin="0,116,0,32"/>
+                TextAlignment="Center" Margin="0,90,0,58"/>
             <Button
                 Grid.Row="1"
                 Content="Close"
-                HorizontalAlignment="Right"
+                HorizontalAlignment="Left"
                 Click="OnCloseClick"
                 Width="200"
-                Margin="{StaticResource SmallLeftTopRightBottomMargin}" />
+                Margin="241,12,0,12" />
+            <Button
+                x:Name="acceptButton"
+                Grid.Row="1"
+                Visibility="Hidden"
+                Content="Accept"
+                HorizontalAlignment="Left"
+                Click="AcceptUserInput"
+                Width="200"
+                Margin="21,12,0,12" />
+            <TextBox
+                x:Name="DialogInput"
+                Text="{Binding DialogInputString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                HorizontalAlignment="Left"
+                Margin="10,182,0,0"
+                TextWrapping="Wrap"
+                VerticalAlignment="Top"
+                Width="429"/>
         </Grid>
     </controls:MetroWindow.Content>
 </controls:MetroWindow>

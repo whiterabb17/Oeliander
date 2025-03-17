@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,13 +57,15 @@ public static class ServerExtensions
         {
             if (ssh.Client == null || ssh.Shell == null || !ssh.Client.IsConnected)
                 return ssh.Connect(window);
+            else if (ssh.Client.IsConnected)
+                return true;
             else
                 return false;
         }
         catch { return false; }
     }
-    private static MainPage main;
-    private static TerminalPage term;
+    internal static MainPage main;
+    internal static TerminalPage term;
     public static bool Connect(this SSH ssh, int window)
     {
         try
@@ -91,12 +94,11 @@ public static class ServerExtensions
         }
     }
 
-    public static void SendCMD(this SSH ssh, string cmd, MainPage mainWindow)
+    public static void SendCMD(this SSH ssh, string cmd, int window)
     {
-        main = mainWindow;
         try
         {
-            if (TryConnect(ssh, 0))
+            if (TryConnect(ssh, window))
             {
                 //main.AddLog($"{ssh.Username}@{ssh.IP}: Connected Successfully");
                 ssh.Shell.Write(cmd + "\n");
@@ -104,9 +106,16 @@ public static class ServerExtensions
             }
         }
         catch (Exception ex) 
-        { 
-            Console.WriteLine($"{ssh.Username}@{ssh.IP}: {ex.Message}");
-            main.AddLog($"{ssh.Username}@{ssh.IP}: {ex.Message}");
+        {
+            switch (window)
+            {
+                case 0:
+                    main.AddLog($"{ssh.Username}@{ssh.IP}: {ex.Message}");
+                    break;
+                case 1:
+                    term.AddResult($"ERROR: {ssh.Username}@{ssh.IP} {ex.Message}");
+                    break;
+            }            
         }
     }
 
@@ -122,7 +131,7 @@ public static class ServerExtensions
                     switch (window)
                     {
                         case 0:
-                            main.AddLog($"{ssh.Username}@{ssh.IP}: {content}\n");
+                            main.AddLog($"{ssh.Username}@{ssh.IP}: {content}");
                             if (ScanHelper.carryon == 1)
                             {
                                 if (content.Contains("error"))
@@ -132,7 +141,7 @@ public static class ServerExtensions
                             }
                             break;
                         case 1:
-                            term.AddResult($"{ssh.Username}@{ssh.IP}: {content}");
+                            term.AddResult($"{ssh.Username}@{ssh.IP}: {content.Replace("\n","")}");
                             break;
                     }                    
                 }
@@ -151,8 +160,9 @@ public static class ServerExtensions
             scpClient.Connect();
             // Send the file using SCP
             var fileStream = System.IO.File.OpenRead(localFilePath);
+            remoteFilePath += $"/{Path.GetFileName(localFilePath)}";
             scpClient.Upload(fileStream, remoteFilePath);
-            return "File uploaded successfully.";            
+            return $"File uploaded successfully:\n{remoteFilePath}";            
         }
         catch (Exception ex)
         {
@@ -160,27 +170,4 @@ public static class ServerExtensions
         }
     }
     #endregion General Logic
-    #region TerminalWindow Command Logic
-    public static void SendCMD(this SSH ssh, string cmd, TerminalPage termWindow)
-    {
-        term = termWindow;
-        try
-        {
-            if (TryConnect(ssh, 1))
-            {
-                ssh.Shell.Write(cmd + "\n");
-                ssh.Shell.Flush();
-            }
-            else
-            {
-                term.SessionResult($"{ssh.Username}@{ssh.IP}: Disconnected Unexpectadly");
-            }
-        }
-        catch (Exception ex)
-        {
-            term.SessionResult($"{ssh.Username}@{ssh.IP}: {ex.Message}");
-            Console.WriteLine($"{ssh.Username}@{ssh.IP}: {ex.Message}");
-        }
-    }
-    #endregion TerminalWindow Connection Logic
 }

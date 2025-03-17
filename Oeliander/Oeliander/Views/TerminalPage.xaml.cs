@@ -17,7 +17,7 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
         DataContext = this;
         FillConnectionList(MainPage._collectionList);
         //ConnectionString = "admin@127.0.0.1:2222";
-        CommandText = "> ";
+        ServerExtensions.term = this;
     }
 
     #region locals
@@ -30,7 +30,6 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
     private string CurrentUser { get; set; }
     private string CurrentIP { get; set; }
     private string CurrentPassword { get; set; }
-    private bool _isConnected = false;
 
     #endregion locals
 
@@ -79,52 +78,54 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
         {
             CollectedTargets.Add(item);
         }
-        //Dispatcher.Invoke(() =>
-        //{
-        //    userGrid.ItemsSource = null;
-        //    userGrid.ItemsSource = _collectionList;
-        //    userGrid.Items.Refresh();
-        //});
     }
 
-    private static SSH ssh;
+    public string GetTime()
+    {
+        return "[" + DateTime.Now.ToString("G") + "]";
+    }
     public void StartSSHConnection(string ip, User user)
     {
-        ssh = new SSH(ip, user.Username, user.Password);
-        if (ssh.TryConnect(1))
+        Objects.ssh = new SSH(ip, user.Username, user.Password);
+        if (Objects.ssh.TryConnect(1))
         {
-            ssh.SendCMD("whoami", this);
-            _isConnected = true;
+            Objects.ssh.SendCMD("whoami", 1);
         }
         else
         {
-            Dispatcher.Invoke(() => { LogBox.AppendText($"[!] {helperObject.GetTime()}: Connection to {ip} failed" + Environment.NewLine); });
+            Dispatcher.Invoke(() => { LogBox.AppendText($"[!] {GetTime()}: Connection to {ip} failed" + Environment.NewLine); });
         }
     }
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-        var args = CommandText.Trim(); // commandText.Text.Trim();
-        CurrentUser = args.Split('@')[0];
-        CurrentPassword = args.Split(':')[1];
-        CurrentIP = args.Split('@')[1].Split(':')[0];
-        User User = new User(CurrentUser, CurrentPassword);
-        StartSSHConnection(CurrentIP, User);
+        switch (ConnectButton.Content.ToString().ToLower())
+        {
+            case "connect":
+                var args = connectionString.Text.Trim(); // commandText.Text.Trim();
+                CurrentUser = args.Split('@')[0];
+                CurrentPassword = args.Split(':')[1];
+                CurrentIP = args.Split('@')[1].Split(':')[0];
+                User User = new User(CurrentUser, CurrentPassword);
+                StartSSHConnection(CurrentIP, User);
+                ConnectButton.Content = "Disconnent";
+                break;
+            case "disconnect":
+                ConnectButton.Content = "Connect";
+                Objects.ssh.Client.Disconnect();
+                break;
+        }        
     }
 
     private void ShowAlert(string title, string message, int state)
     {
-        var dialogWindow = new ShellDialogWindow(title, message, state);
-        dialogWindow.ShowDialog();
+        var dialogWindow = new ShellDialogWindow(title, message, state, false);
+        dialogWindow.ShowDialog();        
     }
 
     private void UploadFileToTarget(object sender, RoutedEventArgs e)
     {
-        if (!_isConnected)
+        if (Objects.ssh.TryConnect(1))
         {
-            ShowAlert("No Connection", "Must have a valid connection\nbefore attempting file uploads", 2);
-        }
-        else
-        {        
             var op = new OpenFileDialog();
             op.RestoreDirectory = true;
             op.ShowDialog();
@@ -135,6 +136,10 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
             if (result.Contains("successful")) { i = 0; }
             else { i = 2; }
             ShowAlert("File Upload", result, i);
+        }
+        else
+        {
+            ShowAlert("No Connection", "Must have a valid connection\nbefore attempting file uploads", 2);
         }
     }
 
@@ -179,14 +184,32 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
     {
         if (e.Key == System.Windows.Input.Key.Enter)
         {
-            if (ssh.TryConnect(1))
-            {
-                ssh.SendCMD(CommandText.Trim().Replace("> ", ""), this);  //commandText.Text.Trim().Replace("> ", ""), this);
-                Dispatcher.Invoke(() =>
+            //if (_isConnected)
+            //{
+            //    Objects.ssh.SendCMD(commandText.Text.Trim().Replace("> ", ""), 1);  //commandText.Text.Trim().Replace("> ", ""), this);
+
+            //    Dispatcher.Invoke(() =>
+            //    {
+            //        commandText.Text = "> "; // commandText.Text = "> ";
+            //        commandText.ScrollToEnd();
+            //    });
+            //}
+            //else 
+            //{
+                if (Objects.ssh.TryConnect(1))
                 {
-                    CommandText = "> "; // commandText.Text = "> ";
-                });
-            }
+                    Objects.ssh.SendCMD(commandText.Text.Trim(), 1);  //commandText.Text.Trim().Replace("> ", ""), this);
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        commandText.Text = "";
+                    });
+                }
+                else
+                {
+                    ShowAlert("Connection Failed", "Connection failed to send command", 1);
+                }
+            //}            
         }
     }
 }

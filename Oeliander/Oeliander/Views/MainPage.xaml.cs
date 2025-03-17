@@ -13,6 +13,9 @@ using System.Windows.Markup;
 using System.Diagnostics;
 using System.Windows;
 using ControlzEx.Standard;
+using Newtonsoft.Json;
+using Renci.SshNet.Messages;
+using System.Reflection;
 
 namespace OelianderUI.Views;
 
@@ -51,7 +54,6 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
     }
     public void AddToLogFile(string text)
     {
-        if (!File.Exists("Oeliander.log")) { File.Create("Oeliander.log"); }
         Thread.Sleep(1000);
         _readWriteLock.EnterWriteLock();
         try
@@ -69,7 +71,7 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
     {
         try
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() => 
             {
                 LogBox.AppendText(text + Environment.NewLine);
             });
@@ -84,7 +86,9 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         //_scanResults = scanResultService;
         InitializeComponent();
         DataContext = this;
-        helperObject = new ScanHelper(AddLog, false, this) { debugMod = false };
+        helperObject = new ScanHelper(false, this) { debugMod = false };
+        ServerExtensions.main = this;
+        if (!File.Exists("Oeliander.log")) { File.Create("Oeliander.log"); }
     }
     public void ScanStop()
     {
@@ -155,13 +159,6 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
             Console.Write(_finalList);
             Console.WriteLine();
             FillList();
-            //FillList(_finalList);
-            //Dispatcher.Invoke(() =>
-            //{
-            //    userGrid.ItemsSource = null;
-            //    userGrid.ItemsSource = _collectionList;
-            //    userGrid.Items.Refresh();
-            //});
         }
         catch (Exception E)
         {
@@ -173,7 +170,7 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
     {
 #if DEBUG
         if (_collectionList.Count == 0)
-        {        
+        {
             _collectionList.Add(new CollectionListing()
             {
                 Index = 1,
@@ -182,6 +179,22 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
                 IPAddress = "127.0.0.1",
                 Status = "Unauthenticated"
             });
+            //_collectionList.Add(new CollectionListing()
+            //{
+            //    Index = 1,
+            //    Username = "admin",
+            //    Password = "password1",
+            //    IPAddress = "127.0.0.2",
+            //    Status = "Unauthenticated"
+            //}); 
+            //_collectionList.Add(new CollectionListing()
+            //{
+            //    Index = 1,
+            //    Username = "admin",
+            //    Password = "password",
+            //    IPAddress = "127.0.0.3",
+            //    Status = "Unauthenticated"
+            //});
         }
 #endif
         FillList();
@@ -214,13 +227,6 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
             targetLabel.Text = "Target(s)";
             fileSelect.IsEnabled = true;
         }
-        //else
-        //{
-        //    ShodanScan = true;
-        //    routerVersion.Visibility = System.Windows.Visibility.Visible;
-        //    ROSTextBlock.Visibility = System.Windows.Visibility.Visible;
-        //    TargetTextBox.IsEnabled = false;
-        //}
     }
 
     private void ShodanScanButton_Checked(object sender, System.Windows.RoutedEventArgs e)
@@ -231,13 +237,6 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
             targetLabel.Text = "Router Version: (Affected Versions: 6.29-6.42)";
             fileSelect.IsEnabled = false;
         }
-        //else
-        //{
-        //    ShodanScan = false;
-        //    routerVersion.Visibility = System.Windows.Visibility.Hidden;
-        //    ROSTextBlock.Visibility = System.Windows.Visibility.Hidden;
-        //    TargetTextBox.IsEnabled = true;
-        //}
     }
 
     private void fileSelect_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -301,6 +300,61 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
 
     private void AttemptBTW(object sender, System.Windows.RoutedEventArgs e)
     {
-        helperObject.TryInfect(targetForBTW, userForBtw, "backdoor");
+        // Not implemented as we are unable to get a RouterOS v6.29-6.42 device to test against
+        // So we cannot guarentee functionality
+        //
+        // helperObject.TryInfect(targetForBTW, userForBtw, "backdoor");
+    }
+
+    private void ExportToList(object sender, RoutedEventArgs e)
+    {
+        File.WriteAllText("TargetList.json", JsonConvert.SerializeObject(_collectionList));
+    }
+
+    private void ExportNewList(object sender, RoutedEventArgs e)
+    {
+        var dialogWindow = new ShellDialogWindow("Save Target List", "Please enter a name for the new list", 0, true);
+        dialogWindow.ShowDialog();
+        if (dialogWindow.DialogReturnText != "")
+        {
+            File.WriteAllText(dialogWindow.DialogReturnText + ".json", JsonConvert.SerializeObject(_collectionList));
+        }
+        else
+        {
+            File.WriteAllText("list.json", JsonConvert.SerializeObject(_collectionList));
+        }
+        dialogWindow.Close();
+    }
+
+    private void ImportList(object sender, RoutedEventArgs e)
+    {
+        userGrid.ItemsSource = null;
+        userGrid.Items.Refresh();
+        _collectionList.Clear();
+        var targetFile = "";
+        var jsonFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.json");
+        string[] stringsToRemove = { $"{Directory.GetCurrentDirectory()}\\appsettings.json", $"{Directory.GetCurrentDirectory()}\\OelianderUI.runtimeconfig.json", $"{Directory.GetCurrentDirectory()}\\OelianderUI.deps.json" };
+        jsonFiles = jsonFiles.Where(x => !stringsToRemove.Contains(x)).ToArray();
+        if (jsonFiles.Count() > 1)
+        {
+            var dialogWindow = new ShellDialogWindow("Select File to Import", "Multiple potential target files have been found.\nPlease select one", 1, false);
+            dialogWindow.ShowDialog();
+            var op = new OpenFileDialog();
+            op.DefaultDirectory = Path.GetFullPath(Assembly.GetEntryAssembly().Location);
+            op.Filter = "Json Files (*.json)|*.json";
+            op.ShowDialog();
+            targetFile = op.FileName;
+        }
+        else
+        {
+            targetFile = jsonFiles[0];
+        }
+        var jsonstring = File.ReadAllText(targetFile);
+        List<CollectionListing> jsonobj = JsonConvert.DeserializeObject<List<CollectionListing>>(jsonstring);
+        foreach (var item in jsonobj)
+        {
+            _collectionList.Add(item);
+        }
+        FillList();
     }
 }
