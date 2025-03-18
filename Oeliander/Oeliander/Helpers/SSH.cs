@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using OelianderUI.Views;
 using Renci.SshNet;
 
@@ -95,6 +96,30 @@ public static class ServerExtensions
                     break;
             }
             return false;
+        }
+    }
+
+    public static string ExecuteCommand(this SSH ssh, string command)
+    {
+        try
+        {
+            ssh.Shell.Write(command);
+            ssh.Shell.Flush();
+            if (ssh.Shell != null && ssh.Shell.DataAvailable)
+            {
+                var content = ssh.Shell.Read();
+                return content;
+            }
+            else
+            {
+                return "";
+            }
+        }
+        catch (Exception ex)
+        {
+            Objects.obj.HandleException(ex);
+            Objects.ShowAlert("Connection Error", ex.Message, 1);
+            return ex.Message;
         }
     }
 

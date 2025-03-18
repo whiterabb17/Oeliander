@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics.X86;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
@@ -16,7 +17,6 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
         InitializeComponent();
         DataContext = this;
         FillConnectionList(MainPage._collectionList);
-        //ConnectionString = "admin@127.0.0.1:2222";
         ServerExtensions.term = this;
     }
 
@@ -41,7 +41,7 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
     {
         try
         {
-            Dispatcher.Invoke(() => { connectionString.Text = ""; connectionString.Text = text; }); //connectionString.Text = ""; connectionString.Text = text; });
+            Dispatcher.Invoke(() => { connectionString.Text = ""; connectionString.Text = text; });
         }
         catch (Exception E)
         {
@@ -152,19 +152,30 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
     {
         if (e.Key == System.Windows.Input.Key.Enter)
         {
-            if (Objects.ssh.TryConnect(1))
+            try
             {
-                Objects.ssh.SendCMD(commandText.Text.Trim(), 1);  //commandText.Text.Trim().Replace("> ", ""), this);
-
-                Dispatcher.Invoke(() =>
-                {
-                    commandText.Text = "";
-                });
+                Objects.ssh.Connect(1);
+                var output = Objects.ssh.ExecuteCommand(commandText.Text.Trim());
+                AddResult(output);
             }
-            else
+            catch (Exception ex)
             {
                 Objects.ShowAlert("Connection Failed", "Connection failed to send command", 1);
-            }      
+                Objects.obj.HandleException(ex);
+            }
+            //if (Objects.ssh.TryConnect(1))
+            //{
+            //    Objects.ssh.SendCMD(commandText.Text.Trim(), 1);  //commandText.Text.Trim().Replace("> ", ""), this);
+
+            //    Dispatcher.Invoke(() =>
+            //    {
+            //        commandText.Text = "";
+            //    });
+            //}
+            //else
+            //{
+                
+            //}      
         }
     }
 }
