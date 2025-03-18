@@ -304,6 +304,7 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         // So we cannot guarentee functionality
         //
         // helperObject.TryInfect(targetForBTW, userForBtw, "backdoor");
+        //
     }
 
     private void ExportToList(object sender, RoutedEventArgs e)
