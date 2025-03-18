@@ -25,8 +25,14 @@ namespace OelianderUI.Views
         public DirectoryViewPage()
         {
             InitializeComponent();
-            LoadDrives();
             Objects.dirViewer = this;
+            if (Objects.ssh != null)
+            {
+                if (Objects.ssh.Client.IsConnected)
+                    LoadDrives(false);
+            }
+            else
+                LoadDrives();
         }
         public static List<string> _Drives { get;set; }
         public static string CurrentlySelectedDrive { get;set; }
@@ -56,6 +62,29 @@ namespace OelianderUI.Views
             }
         }
 
+        private string ReturnResult(string command)
+        {
+            try
+            {
+                if (Objects.ssh.TryConnect(1))
+                {
+                    var output = Objects.ssh.ExecuteCommand(command);
+                    return output;
+                } 
+                else
+                {
+                    return "Unable to connect to remote system";
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Objects.ShowAlert("Connection Failed", "Connection failed to send command", 1);
+                Objects.obj.HandleException(ex);
+                return "";
+            }
+        }
+
         private void DriveComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (DriveComboBox.SelectedItem != null)
@@ -67,15 +96,9 @@ namespace OelianderUI.Views
                         LoadDirectories(CurrentlySelectedDrive);
                         break;
                     case false:
-                        if (Objects.ssh.TryConnect(1))
-                        {
-                            Objects.ssh.SendCMD($"ls {CurrentlySelectedDrive}", 2);  //commandText.Text.Trim().Replace("> ", ""), this);
-                            IsDirectory = true;
-                        }
-                        else
-                        {
-                            Objects.ShowAlert("Connection Failed", "Connection failed to send command", 1);
-                        }
+                        var result = ReturnResult($"ls {CurrentlySelectedDrive}");
+                        IsDirectory = true;
+                        SortData(result);
                         break;
                 }
             }
@@ -170,15 +193,9 @@ namespace OelianderUI.Views
                             LoadFiles(CurrentlySelectedPath);
                             break;
                         case false:
-                            if (Objects.ssh.TryConnect(1))
-                            {
-                                Objects.ssh.SendCMD($"ls {CurrentlySelectedPath}", 2);  //commandText.Text.Trim().Replace("> ", ""), this);
-                                IsDirectory = false;
-                            }
-                            else
-                            {
-                                Objects.ShowAlert("Connection Failed", "Connection failed to send command", 1);
-                            }
+                            IsDirectory = false;
+                            var result = ReturnResult($"ls {CurrentlySelectedPath}");
+                            SortData(result);
                             break;
                     }
                 }
@@ -212,15 +229,8 @@ namespace OelianderUI.Views
                         }
                         break;
                     case false:
-                        if (Objects.ssh.TryConnect(1))
-                        {
-                            Objects.ssh.SendCMD($"ls {path}", 2);  //commandText.Text.Trim().Replace("> ", ""), this);
-                            IsDirectory = false;
-                        }
-                        else
-                        {
-                            Objects.ShowAlert("Connection Failed", "Connection failed to send command", 1);
-                        }
+                        var result = ReturnResult($"ls {path}");
+                        SortData(result);
                         break;
                 }
             }
@@ -236,15 +246,9 @@ namespace OelianderUI.Views
                         LoadDirectories(PathTextBox.Text);
                         break;
                     case false:
-                        if (Objects.ssh.TryConnect(1))
-                        {
-                            Objects.ssh.SendCMD($"ls {PathTextBox.Text}", 2);  //commandText.Text.Trim().Replace("> ", ""), this);
-                            IsDirectory = true;
-                        }
-                        else
-                        {
-                            Objects.ShowAlert("Connection Failed", "Connection failed to send command", 1);
-                        }
+                        IsDirectory = true;
+                        var result = ReturnResult($"ls {PathTextBox.Text}");
+                        SortData(result);
                         break;
                 }
             }

@@ -41,7 +41,9 @@ public partial class ShellWindow : MetroWindow, IShellWindow, INotifyPropertyCha
     {
         new HamburgerMenuGlyphItem() { Label = Properties.Resources.ShellMainPage, Glyph = "\uE730", TargetPageType = typeof(MainPage) },
         new HamburgerMenuGlyphItem() { Label = Properties.Resources.ShellTerminalPage, Glyph = "\uE70C", TargetPageType = typeof(TerminalPage) },
+#if DIRVIEW
         new HamburgerMenuGlyphItem() { Label = Properties.Resources.ShellDirectoryViewerPage, Glyph = "\uE71D", TargetPageType = typeof(DirectoryViewPage) },
+#endif
     };
 
     public ObservableCollection<HamburgerMenuItem> OptionMenuItems { get; } = new ObservableCollection<HamburgerMenuItem>()

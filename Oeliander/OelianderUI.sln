@@ -10,15 +10,20 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		DirView|Any CPU = DirView|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6313D5D8-F25B-4220-0FBF-7149A85E7C62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6313D5D8-F25B-4220-0FBF-7149A85E7C62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6313D5D8-F25B-4220-0FBF-7149A85E7C62}.DirView|Any CPU.ActiveCfg = DirView|Any CPU
+		{6313D5D8-F25B-4220-0FBF-7149A85E7C62}.DirView|Any CPU.Build.0 = DirView|Any CPU
 		{6313D5D8-F25B-4220-0FBF-7149A85E7C62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6313D5D8-F25B-4220-0FBF-7149A85E7C62}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26E4F3A2-8CE2-3747-88CB-FE00CB4096CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26E4F3A2-8CE2-3747-88CB-FE00CB4096CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26E4F3A2-8CE2-3747-88CB-FE00CB4096CF}.DirView|Any CPU.ActiveCfg = DirView|Any CPU
+		{26E4F3A2-8CE2-3747-88CB-FE00CB4096CF}.DirView|Any CPU.Build.0 = DirView|Any CPU
 		{26E4F3A2-8CE2-3747-88CB-FE00CB4096CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26E4F3A2-8CE2-3747-88CB-FE00CB4096CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

@@ -1,12 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics.X86;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Win32;
 using OelianderUI.Core.Models;
 using OelianderUI.Helpers;
+using Renci.SshNet;
 
 namespace OelianderUI.Views;
 
@@ -88,6 +91,22 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
                 Objects.ssh.Client.Disconnect();
                 break;
         }        
+    }
+
+    private void DownloadFileFromTarget(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var remoteFilePath = Objects.obj.OpenDialogWindowWithResult("Download File", "Enter the full/path/to/remote file");
+            var localFileName = remoteFilePath.Split('/').Last();
+            // Create a connection to the remote system
+            ServerExtensions.RecieveFile(Objects.CurrentIP, Objects.CurrentUser, Objects.CurrentPassword, localFileName, remoteFilePath);
+        }
+        catch (Exception ex)
+        {
+            Objects.obj.HandleException(ex);
+            Objects.ShowAlert("ERROR", $"{ex.Message}", 2);
+        }
     }
 
     private void UploadFileToTarget(object sender, RoutedEventArgs e)

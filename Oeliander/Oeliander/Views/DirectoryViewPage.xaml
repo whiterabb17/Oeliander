@@ -16,7 +16,7 @@
         <TextBlock
             Style="{StaticResource PageTitleStyle}"
             Margin="{StaticResource MediumLeftMargin}"
-            Text="Directory Viewer" />
+            Text="Directory Viewer" Foreground="White" />
         <Grid
             Grid.Row="1">
             <ComboBox 
@@ -31,14 +31,14 @@
                 Foreground="White" 
                 Height="36" 
                 VerticalAlignment="Top" 
-                Margin="289,8,0,0" 
+                Margin="261,8,0,0" 
                 HorizontalAlignment="Left" Width="110" />
 
             <TextBox 
                 x:Name="PathTextBox" 
                 VerticalAlignment="Top" 
                 Height="28" 
-                Margin="336,8,0,0" 
+                Margin="308,8,0,0" 
                 HorizontalAlignment="Left" 
                 Width="345" />
 
@@ -47,7 +47,7 @@
                 Content="Go" 
                 VerticalAlignment="Top" 
                 Height="28" 
-                Margin="691,8,0,0" 
+                Margin="663,8,0,0" 
                 HorizontalAlignment="Left" 
                 Width="75"
                 FontSize="13"

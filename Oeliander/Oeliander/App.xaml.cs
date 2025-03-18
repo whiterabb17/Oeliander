@@ -18,11 +18,6 @@ using OelianderUI.Helpers;
 
 namespace OelianderUI;
 
-// For more information about application lifecycle events see https://docs.microsoft.com/dotnet/framework/wpf/app-development/application-management-overview
-
-// WPF UI elements use language en-US by default.
-// If you need to support other cultures make sure you add converters and review dates and numbers in your UI to ensure everything adapts correctly.
-// Tracking issue for improving this is https://github.com/dotnet/wpf/issues/1946
 public partial class App : Application
 {
     private IHost _host;
@@ -78,9 +73,9 @@ public partial class App : Application
         services.AddTransient<MainPage>();
 
         services.AddTransient<TerminalPage>();
-
+#if DIRVIEW
         services.AddTransient<DirectoryViewPage>();
-
+#endif
         services.AddTransient<SettingsPage>();
 
         services.AddTransient<IShellDialogWindow, ShellDialogWindow>();
