@@ -171,4 +171,7 @@
   <data name="SettingsPageAboutText2" xml:space="preserve">
     <value>Mainly the WinBox credential disclosure vulnerability.</value>
   </data>
+  <data name="ShellDirectoryViewerPage" xml:space="preserve">
+    <value>Directory Viewer</value>
+  </data>
 </root>

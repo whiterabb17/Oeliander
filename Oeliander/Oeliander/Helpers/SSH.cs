@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using OelianderUI.Views;
 using Renci.SshNet;
 
@@ -89,8 +90,36 @@ public static class ServerExtensions
                 case 1:
                     term.SessionResult($"{ssh.Username}@{ssh.IP}: {ex.Message}");
                     break;
+                case 2:
+                    var dialogResult = new ShellDialogWindow("Error", $"{ssh.Username}@{ssh.IP}: {ex.Message}", 1, false);
+                    dialogResult.ShowDialog();
+                    break;
             }
             return false;
+        }
+    }
+
+    public static string ExecuteCommand(this SSH ssh, string command)
+    {
+        try
+        {
+            ssh.Shell.Write(command);
+            ssh.Shell.Flush();
+            if (ssh.Shell != null && ssh.Shell.DataAvailable)
+            {
+                var content = ssh.Shell.Read();
+                return content;
+            }
+            else
+            {
+                return "";
+            }
+        }
+        catch (Exception ex)
+        {
+            Objects.obj.HandleException(ex);
+            Objects.ShowAlert("Connection Error", ex.Message, 1);
+            return ex.Message;
         }
     }
 
@@ -114,6 +143,10 @@ public static class ServerExtensions
                     break;
                 case 1:
                     term.AddResult($"ERROR: {ssh.Username}@{ssh.IP} {ex.Message}");
+                    break;
+                case 2:
+                    var dialogResult = new ShellDialogWindow("Error", $"{ssh.Username}@{ssh.IP}: {ex.Message}", 1, false);
+                    dialogResult.ShowDialog();
                     break;
             }            
         }
@@ -150,6 +183,33 @@ public static class ServerExtensions
             Thread.Sleep(200);
             
         }
+    }
+
+    public static void RecieveFile(string hostname, string username, string password, string localFileName, string remoteFilePath)
+    {
+        var scpClient = new SftpClient(hostname, username, password);
+        if (!Directory.Exists("Clients"))
+            Directory.CreateDirectory("Clients");
+        if (!Directory.Exists($"Clients/{hostname}"))
+            Directory.CreateDirectory($"Clients/{hostname}");
+        scpClient.Connect();  // Connect to the remote system
+
+        if (scpClient.IsConnected)
+        {
+            // Download the remote file to the local file system
+            using (var fileStream = new FileStream($"Clients/{hostname}/{localFileName}", FileMode.Create))
+            {
+                scpClient.DownloadFile(remoteFilePath, fileStream);
+            }
+
+            Objects.ShowAlert("Success", $"File {localFileName} was downloaded successfully to:\n -> Clients/{hostname}/{localFileName}", 0);
+        }
+        else
+        {
+            Objects.ShowAlert("Failed", $"Unable to download {localFileName} from:\n -> {remoteFilePath}", 0);
+        }
+
+        scpClient.Disconnect();  // Disconnect from the remote system
     }
 
     public static string SendFile(string hostname, string username, string password, string localFilePath, string remoteFilePath = "/tmp")

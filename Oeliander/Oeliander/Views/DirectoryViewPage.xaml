@@ -1,0 +1,87 @@
+﻿<Page x:Class="OelianderUI.Views.DirectoryViewPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OelianderUI.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="DirectoryView">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Style="{StaticResource PageTitleStyle}"
+            Margin="{StaticResource MediumLeftMargin}"
+            Text="Directory Viewer" Foreground="White" />
+        <Grid
+            Grid.Row="1">
+            <ComboBox 
+                Name="DriveComboBox" 
+                VerticalAlignment="Top" 
+                Margin="93,10,587,0" 
+                SelectionChanged="DriveComboBox_SelectionChanged" />
+
+            <TextBlock
+                Text="Path:"
+                FontSize="18" 
+                Foreground="White" 
+                Height="36" 
+                VerticalAlignment="Top" 
+                Margin="261,8,0,0" 
+                HorizontalAlignment="Left" Width="110" />
+
+            <TextBox 
+                x:Name="PathTextBox" 
+                VerticalAlignment="Top" 
+                Height="28" 
+                Margin="308,8,0,0" 
+                HorizontalAlignment="Left" 
+                Width="345" />
+
+            <Button 
+                x:Name="CustomPathLoad" 
+                Content="Go" 
+                VerticalAlignment="Top" 
+                Height="28" 
+                Margin="663,8,0,0" 
+                HorizontalAlignment="Left" 
+                Width="75"
+                FontSize="13"
+                Click="LoadUserPath" />
+
+            <!-- TreeView for Directories -->
+            <TreeView 
+                Name="DirectoryTreeView" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top" 
+                Width="352" 
+                Height="351" 
+                Margin="8,41,0,0" 
+                SelectedItemChanged="DirectoryTreeView_SelectedItemChanged" 
+                Grid.Row="1" />
+
+            <!-- ListBox for Files -->
+            <ListBox 
+                Name="FileListBox" 
+                VerticalAlignment="Top" 
+                Height="351" 
+                Margin="365,41,0,0" 
+                Grid.Row="1" 
+                HorizontalAlignment="Left" 
+                Width="425" />
+            <TextBlock
+                Text="Drive:"
+                FontSize="18" 
+                Foreground="White" 
+                Height="36" 
+                VerticalAlignment="Top" 
+                Margin="33,8,0,0" 
+                HorizontalAlignment="Left" Width="116"
+                />
+        </Grid>
+    </Grid>
+</Page>

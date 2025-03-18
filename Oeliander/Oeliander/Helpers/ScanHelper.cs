@@ -179,7 +179,7 @@ public class ScanHelper
                 break;
             case "rosbackdoor":
                 /* 
-                 * Code Not Yet Test So Not Yet Implemented
+                 * Code Not Yet Tested So Not Yet Implemented
                  *
                  
                 if (ssh.TryConnect(0))
@@ -240,17 +240,14 @@ public class ScanHelper
                 */
                 mainFormObject.Dispatcher.Invoke(() =>
                 {
-                    mainFormObject.AddLog($"[!] ERROR: Currently not Test so not Implemented");
+                    mainFormObject.AddLog($"[!] ERROR: Currently not Tested so not Implemented");
                 });
                 break;
         }
     }
 
     
-    public string GetTime()
-    {
-        return "[" + DateTime.Now.ToString("G") + "]";
-    }
+    
 
     public void addLog(string text, object dataTwo = null)
     {
@@ -278,7 +275,7 @@ public class ScanHelper
         }
         catch (Exception E)
         {
-            HandleException(E);
+            Objects.obj.HandleException(E);
         }
     }
 
@@ -328,21 +325,6 @@ public class ScanHelper
             _readWriteLock.ExitWriteLock();
         }
     }
-    public void HandleException(Exception E)
-    {
-        errorList ??= new List<string>();
-        if (debugMod)
-        {
-            StackTrace trace = new StackTrace(E, true);
-            var data = trace.GetFrame(0).GetFileLineNumber().ToString() + ": " + E.Message;
-            if (!errorList.Contains(data))
-            {
-                errorList.Add(data);
-                addLog(data);
-                Save(data, "Error");
-            }
-        }
-    }
     private void TryExploit(string target)
     {
         usersList = new List<User>();
@@ -362,7 +344,7 @@ public class ScanHelper
                         {
                             mainFormObject.Dispatcher.Invoke(() =>
                             {
-                                mainFormObject.AddLog($"[!] {GetTime()} CREDENTIALS FOUND:\n Username: {user.Username.PadRight(32)} Password: {user.Password}".PadRight(32) + $"IPAddress: {target}");
+                                mainFormObject.AddLog($"[!] {Objects.GetTime()} CREDENTIALS FOUND:\n Username: {user.Username.PadRight(32)} Password: {user.Password}".PadRight(32) + $"IPAddress: {target}");
                             });
                             Save($"Username: {user.Username}".PadRight(32) + $"Password: {user.Password}".PadRight(32) + $"IPAddress: {target}", "Credentials");
                             sshThreads.Add(new Thread(() => TryInfect(_tar, user)));
@@ -403,7 +385,7 @@ public class ScanHelper
                     List<Thread> sshThreads = new List<Thread>();
                     mainFormObject.Dispatcher.Invoke(() =>
                     {
-                        mainFormObject.AddLog($"[+] {GetTime()} CREDENTIALS FOUND:");
+                        mainFormObject.AddLog($"[+] {Objects.GetTime()} CREDENTIALS FOUND:");
                     });
                     foreach (User user in users)
                     {
@@ -477,7 +459,7 @@ public class ScanHelper
         var ShodanScan = "";
         if (usingShodan) { ShodanScan = "(Shodan Scan) "; }
         else { ShodanScan = ""; }
-        mainFormObject.AddToLogFile("\t[!] Scan Started" + ShodanScan + ": " + GetTime() + Environment.NewLine + Environment.NewLine);
+        mainFormObject.AddToLogFile("\t[!] Scan Started" + ShodanScan + ": " + Objects.GetTime() + Environment.NewLine + Environment.NewLine);
         mainFormObject.Dispatcher.Invoke(() =>
         {
             mainFormObject.StartScanButton.Content = "Stop";
@@ -541,7 +523,7 @@ public class ScanHelper
         }
         catch (Exception E)
         {
-            HandleException(E);
+            Objects.obj.HandleException(E);
             var dialogWindow = new ShellDialogWindow("Scan Error", E.Message, 2);
             dialogWindow.ShowDialog();
         }
@@ -549,7 +531,7 @@ public class ScanHelper
 
     public void Stop()
     {
-        mainFormObject.AddLog(GetTime() + ": Scan Threads are being Aborted");
+        mainFormObject.AddLog(Objects.GetTime() + ": Scan Threads are being Aborted");
         if (threadRunner.IsAlive)
         {
             try
@@ -567,8 +549,8 @@ public class ScanHelper
             }
         }
         Thread.Sleep(5000);
-        mainFormObject.AddLog($"[!] {GetTime()} Scan stopped successfully\n");
-        mainFormObject.AddToLogFile("\n\n\t[*] End of Scan: " + GetTime() + "\n\n###########################################################################\n\n");
+        mainFormObject.AddLog($"[!] {Objects.GetTime()} Scan stopped successfully\n");
+        mainFormObject.AddToLogFile("\n\n\t[*] End of Scan: " + Objects.GetTime() + "\n\n###########################################################################\n\n");
         mainFormObject.Dispatcher.Invoke(() =>
         {
             mainFormObject.StartScanButton.Content = "Start";
