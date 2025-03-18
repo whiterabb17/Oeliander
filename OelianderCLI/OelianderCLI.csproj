@@ -5,7 +5,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ApplicationIcon>20200315_235158_3536_70_J32_icon.ico</ApplicationIcon>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
     <StartupObject />
     <RootNamespace>OelianderCLI</RootNamespace>
     <AssemblyName>OelianderCLI</AssemblyName>
