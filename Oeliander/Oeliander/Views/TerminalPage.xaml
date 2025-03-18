@@ -62,11 +62,19 @@
                 <RichTextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem
-                            x:Name="upAndExc"
+                            x:Name="uploadRemote"
                             Click="UploadFileToTarget"
                             Header="Upload File">
                             <MenuItem.Icon>
-                                <Image Source="/Assets/upload.png" ></Image>
+                                <Image Source="/Assets/upload.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem
+                            x:Name="downloadLocal"
+                            Click="DownloadFileFromTarget"
+                            Header="Download File">
+                            <MenuItem.Icon>
+                                <Image Source="/Assets/download.png" />
                             </MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>

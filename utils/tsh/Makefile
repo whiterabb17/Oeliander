@@ -19,12 +19,12 @@ all:
 	@echo
 
 windows:
-	env ${DEFAULT_ENV} GOOS=windows GOARCH=amd64 go build ${GOFLAGS_WINDOWS} -o ./build/tshd_windows_amd64.exe cmd/tshd.go
-	env ${DEFAULT_ENV} GOOS=windows GOARCH=amd64 go build ${GOFLAGS_WINDOWS} -o ./build/tsh_windows_amd64.exe cmd/tsh.go
+	env ${DEFAULT_ENV} GOOS=windows GOARCH=amd64 go build ${GOFLAGS_WINDOWS} -o ../BuiltUtils/tshd_windows_amd64.exe cmd/tshd.go
+	env ${DEFAULT_ENV} GOOS=windows GOARCH=amd64 go build ${GOFLAGS_WINDOWS} -o ../BuiltUtils/tsh_windows_amd64.exe cmd/tsh.go
 
 linux:
-	env ${DEFAULT_ENV} GOOS=linux GOARCH=386 go build ${GOFLAGS_LINUX} -o ./build/tshd_linux_386 cmd/tshd.go
-	env ${DEFAULT_ENV} GOOS=linux GOARCH=386 go build ${GOFLAGS_LINUX} -o ./build/tsh_linux_386 cmd/tsh.go
+	env ${DEFAULT_ENV} GOOS=linux GOARCH=386 go build ${GOFLAGS_LINUX} -o ../BuiltUtils/tshd_linux_386 cmd/tshd.go
+	env ${DEFAULT_ENV} GOOS=linux GOARCH=amd64 go build ${GOFLAGS_LINUX} -o ../BuiltUtils/tsh_linux_amd64 cmd/tsh.go
 
 mipsle:
 	env ${DEFAULT_ENV} GOOS=linux GOARCH=mipsle go build ${GOFLAGS_LINUX} -o ./build/tshd_linux_mipsle cmd/tshd.go

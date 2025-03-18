@@ -12,10 +12,10 @@
     <system:String x:Key="Theme.Origin">App2</system:String>
     <system:String x:Key="Theme.DisplayName">Blue (Dark)</system:String>
     <system:String x:Key="Theme.BaseColorScheme">Dark</system:String>
-    <system:String x:Key="Theme.ColorScheme">Blue</system:String>
+    <system:String x:Key="Theme.ColorScheme">Purple</system:String>
     <system:Boolean x:Key="Theme.IsHighContrast">true</system:Boolean>
-    <Color x:Key="Theme.PrimaryAccentColor">#FF0078D7</Color>
-    <SolidColorBrush x:Key="Theme.ShowcaseBrush" Color="#FF0078D7" options:Freeze="True" />
+    <Color x:Key="Theme.PrimaryAccentColor">#4d004d</Color>
+    <SolidColorBrush x:Key="Theme.ShowcaseBrush" Color="#4d004d" options:Freeze="True" />
 
     <!--
     We've defined the most basic colors and brushes.

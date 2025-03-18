@@ -8,6 +8,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>glorysprout.ico</ApplicationIcon>
+    <Configurations>Debug;Release;DirView</Configurations>
   </PropertyGroup>
   
   <ItemGroup>

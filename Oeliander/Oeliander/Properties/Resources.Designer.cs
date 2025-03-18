@@ -169,6 +169,15 @@ namespace OelianderUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Directory Viewer.
+        /// </summary>
+        public static string ShellDirectoryViewerPage {
+            get {
+                return ResourceManager.GetString("ShellDirectoryViewerPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Go back.
         /// </summary>
         public static string ShellGoBackButton {
