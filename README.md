@@ -5,7 +5,7 @@
 - WinBox Auth Bypass Credential Disclosure (CVE-2018-14847) <br>
 -- Allows direct SSH into the vulnerable device using collected credentials <br>
 -- Allows for uploads to the target system <br>
--- Allows for root backdoor install using MikroTik options package <br>
+-- ~Allows for root backdoor install using MikroTik options package~ *UNTESTED* <br>
 
 - Shodan search integration <br>
 -- Allows for target collection and IP assessments using shodan <br><br>
