@@ -26,7 +26,7 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
     public ScanHelper helperObject { get; set; }
     internal static bool ShodanScan = false;
     internal static string _targetingString = "";
-    public ObservableCollection<ScanResult> Source { get; } = new();
+    public ObservableCollection<CollectionListing> Source { get; } = new();
     public List<string> collectedCredentials = new();
     public List<string> rosVersion = new();
     public static Dictionary<Helpers.User, string> _staticList = new();
@@ -52,21 +52,7 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
             Objects.obj.HandleException(E);
         }
     }
-    public void AddToLogFile(string text)
-    {
-        Thread.Sleep(1000);
-        _readWriteLock.EnterWriteLock();
-        try
-        {
-            var resultPath = Directory.GetCurrentDirectory() + "\\Oeilander.log";
-            using StreamWriter st = File.AppendText(resultPath);
-            st.WriteLine(text);
-        }
-        finally
-        {
-            _readWriteLock.ExitWriteLock();
-        }
-    }
+    
     public void AddLog(string text, object obj)
     {
         try
@@ -87,7 +73,7 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         InitializeComponent();
         DataContext = this;
         helperObject = new ScanHelper(false, this) { debugMod = false };
-        ServerExtensions.main = this;
+        Objects.main = this;
         if (!File.Exists("Oeliander.log")) { File.Create("Oeliander.log"); }
     }
     public void ScanStop()
@@ -96,17 +82,23 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         {
             StartScanButton.Content = "Start";
             AddLog(Environment.NewLine + Objects.GetTime() + ": Scan stopped successfully\n");
-            AddToLogFile("\n\n\t[*] End of Scan: " + Objects.GetTime() + "\n\n###############################################################################\n\n");
+            Objects.obj.AddToLogFile("\n\n\t[*] End of Scan: " + Objects.GetTime() + "\n\n###############################################################################\n\n");
         });
     }
     public void FillList()
     {
-        Dispatcher.Invoke(() =>
+        if (Source.Count > 0)
+            Source.Clear();
+        foreach (var item in _collectionList)
         {
-            userGrid.ItemsSource = null;
-            userGrid.ItemsSource = _collectionList;
-            userGrid.Items.Refresh();
-        });
+            Source.Add(item);
+        }
+        //Dispatcher.Invoke(() =>
+        //{
+        //    userGrid.ItemsSource = null;
+        //    userGrid.ItemsSource = _collectionList;
+        //    userGrid.Items.Refresh();
+        //});
     }
     public void FillList(List<CollectionListing> _connections)
     {
@@ -130,8 +122,8 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
             var _finalList = _collectionList.Distinct().ToList();
             Console.Write(_finalList);
             Console.WriteLine();
-            FillList();
-//            FillList(_finalList);
+            FillList(_finalList);
+            // FillList();
         }
         catch (Exception E)
         {
@@ -179,22 +171,22 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
                 IPAddress = "127.0.0.1",
                 Status = "Unauthenticated"
             });
-            //_collectionList.Add(new CollectionListing()
-            //{
-            //    Index = 1,
-            //    Username = "admin",
-            //    Password = "password1",
-            //    IPAddress = "127.0.0.2",
-            //    Status = "Unauthenticated"
-            //}); 
-            //_collectionList.Add(new CollectionListing()
-            //{
-            //    Index = 1,
-            //    Username = "admin",
-            //    Password = "password",
-            //    IPAddress = "127.0.0.3",
-            //    Status = "Unauthenticated"
-            //});
+            _collectionList.Add(new CollectionListing()
+            {
+                Index = 1,
+                Username = "admin",
+                Password = "password1",
+                IPAddress = "127.0.0.2",
+                Status = "Unauthenticated"
+            });
+            _collectionList.Add(new CollectionListing()
+            {
+                Index = 1,
+                Username = "admin",
+                Password = "password",
+                IPAddress = "127.0.0.3",
+                Status = "Unauthenticated"
+            });
         }
 #endif
         FillList();
@@ -347,6 +339,6 @@ public partial class MainPage : Page, INotifyPropertyChanged, INavigationAware
         {
             _collectionList.Add(item);
         }
-        FillList();
+        FillList(_collectionList);
     }
 }

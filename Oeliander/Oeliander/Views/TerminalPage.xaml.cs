@@ -7,20 +7,21 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Win32;
+using OelianderUI.Contracts.Views;
 using OelianderUI.Core.Models;
 using OelianderUI.Helpers;
 using Renci.SshNet;
 
 namespace OelianderUI.Views;
 
-public partial class TerminalPage : Page, INotifyPropertyChanged
+public partial class TerminalPage : Page, INotifyPropertyChanged, INavigationAware
 {
     public TerminalPage()
     {
         InitializeComponent();
         DataContext = this;
-        FillConnectionList(MainPage._collectionList);
-        ServerExtensions.term = this;
+        //FillConnectionList(MainPage._collectionList);
+        Objects.term = this;
     }
 
     #region locals
@@ -39,6 +40,13 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
             Objects.obj.HandleException(E);
         }
     }
+    public async void OnNavigatedTo(object parameter)
+    {
+        FillConnectionList(MainPage._collectionList);
+    }
+    public void OnNavigatedFrom()
+    {
+    }
 
     public void SessionResult(string text)
     {
@@ -55,9 +63,14 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
 
     private void FillConnectionList(List<CollectionListing> _collectionList)
     {
-        foreach (var item in _collectionList)
+        CollectedTargets.Clear();
+        if (_collectionList.Count > 0)
         {
-            CollectedTargets.Add(item);
+            foreach (var item in _collectionList)
+            {
+                if (!string.IsNullOrEmpty(item.Username) || !string.IsNullOrWhiteSpace(item.Username))
+                    CollectedTargets.Add(item);
+            }
         }
     }
 
@@ -66,7 +79,8 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
         Objects.ssh = new SSH(ip, user.Username, user.Password);
         if (Objects.ssh.TryConnect(1))
         {
-            Objects.ssh.SendCMD("whoami", 1);
+            var response = Objects.ssh.ExecuteCommand("whoami");
+            AddResult(response);
         }
         else
         {
@@ -157,14 +171,18 @@ public partial class TerminalPage : Page, INotifyPropertyChanged
 
     private void userGrid_SelectedCellsChanged_1(object sender, SelectedCellsChangedEventArgs e)
     {
-        if (termGrid.CurrentItem != null)
+        try
         {
-            CollectionListing selectedItem = (CollectionListing)termGrid.CurrentItem;
+            var selectedItem = (CollectionListing)termGrid.CurrentItem;
             if (selectedItem != null)
             {
                 Dispatcher.Invoke(() => { connectionString.Text = $"{selectedItem.Username}@{selectedItem.IPAddress}:{selectedItem.Password}"; });
             }
-        }        
+        }
+        catch (Exception ex)
+        {
+            Objects.obj.HandleException(ex);
+        }    
     }
 
     private void commandText_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)

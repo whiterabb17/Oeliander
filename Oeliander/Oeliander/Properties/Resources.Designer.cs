@@ -70,6 +70,15 @@ namespace OelianderUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to F5 Big IP Assessment.
+        /// </summary>
+        public static string F5PageTitle {
+            get {
+                return ResourceManager.GetString("F5PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Oeliander MikroTik Exploitation Framework.
         /// </summary>
         public static string MainPageTitle {

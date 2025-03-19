@@ -5,7 +5,7 @@
     <RootNamespace>OelianderUI.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Configurations>Debug;Release;DirView</Configurations>
+    <Configurations>Debug;Release;DirView;WIP</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

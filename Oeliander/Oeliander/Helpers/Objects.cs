@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace OelianderUI.Helpers
         internal static MainPage main { get; set; }
         internal static TerminalPage term { get; set; }
         internal static DirectoryViewPage dirViewer { get; set; }
+        internal static F5BigIPPage f5Page { get;set; }
         internal static Objects obj = new();
         internal static string CurrentUser { get; set; }
         internal static string CurrentIP { get; set; }
@@ -42,7 +44,7 @@ namespace OelianderUI.Helpers
             if (!errorList.Contains(data))
             {
                 errorList.Add(data);
-                Save(data);
+                SaveError(data);
             }
         }
 
@@ -59,14 +61,56 @@ namespace OelianderUI.Helpers
             return returnItem;
         }
 
-        public void Save(string text)
+        public void SaveError(string text)
         {
             Thread.Sleep(1000);
             _readWriteLock.EnterWriteLock();
             try
             {
-                var resultPath = System.IO.Directory.GetCurrentDirectory() + "\\Oeilander.log";
+                var resultPath = System.IO.Directory.GetCurrentDirectory() + "\\Oeliander.log";
                 using System.IO.StreamWriter st = System.IO.File.AppendText(resultPath);
+                st.WriteLine($"{GetTime()} Error: {text} {Environment.NewLine}");
+            }
+            finally
+            {
+                _readWriteLock.ExitWriteLock();
+            }
+        }
+
+        public void SaveLog(string data, string folder, string type = "")
+        {
+            if (!string.IsNullOrEmpty(type))
+                type = $"_{type}";
+            _readWriteLock.EnterWriteLock();
+            try
+            {
+                var resultPath = Directory.GetCurrentDirectory() + "\\Results";
+                if (!Directory.Exists(resultPath))
+                {
+                    Directory.CreateDirectory(resultPath);
+                }
+                if (!Directory.Exists($@"{resultPath}\{folder}"))
+                {
+                    Directory.CreateDirectory($@"{resultPath}\{folder}");
+                }
+                var fileNM = $@"{resultPath}\{folder}\{GetTime().Replace(":", "_")}{type}.txt";
+                using StreamWriter st = File.AppendText(fileNM);
+                st.WriteLine(data);
+            }
+            finally
+            {
+                _readWriteLock.ExitWriteLock();
+            }
+        }
+
+        public void AddToLogFile(string text)
+        {
+            Thread.Sleep(1000);
+            _readWriteLock.EnterWriteLock();
+            try
+            {
+                var resultPath = Directory.GetCurrentDirectory() + "\\Oeilander.log";
+                using StreamWriter st = File.AppendText(resultPath);
                 st.WriteLine(text);
             }
             finally

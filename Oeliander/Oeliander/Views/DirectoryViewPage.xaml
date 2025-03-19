@@ -16,7 +16,8 @@
         <TextBlock
             Style="{StaticResource PageTitleStyle}"
             Margin="{StaticResource MediumLeftMargin}"
-            Text="Directory Viewer" Foreground="White" />
+            Text="Directory Viewer" Foreground="White"
+            HorizontalAlignment="Center" />
         <Grid
             Grid.Row="1">
             <ComboBox 

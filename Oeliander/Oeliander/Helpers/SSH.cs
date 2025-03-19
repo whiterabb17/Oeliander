@@ -12,34 +12,13 @@ namespace OelianderUI.Helpers;
 
 public class SSH
 {
-    public bool Enabled
-    {
-        get; set;
-    }
-    public SshClient Client
-    {
-        get; set;
-    }
-    public ShellStream Shell
-    {
-        get; set;
-    }
-    public Thread Thread
-    {
-        get; set;
-    }
-    public string IP
-    {
-        get; set;
-    }
-    public string Username
-    {
-        get; set;
-    }
-    public string Password
-    {
-        get; set;
-    }
+    public bool Enabled { get; set; }
+    public SshClient Client { get; set; }
+    public ShellStream Shell { get; set; }
+    public Thread Thread { get; set; }
+    public string IP { get; set; }
+    public string Username { get; set; }
+    public string Password { get; set; }
 
     public SSH(string ip, string username, string password)
     {
@@ -65,8 +44,6 @@ public static class ServerExtensions
         }
         catch { return false; }
     }
-    internal static MainPage main;
-    internal static TerminalPage term;
     public static bool Connect(this SSH ssh, int window)
     {
         try
@@ -85,10 +62,10 @@ public static class ServerExtensions
             switch (window)
             {
                 case 0:
-                    main.AddLog($"{ssh.Username}@{ssh.IP}: {ex.Message}");
+                    Objects.main.AddLog($"{ssh.Username}@{ssh.IP}: {ex.Message}");
                     break;
                 case 1:
-                    term.SessionResult($"{ssh.Username}@{ssh.IP}: {ex.Message}");
+                    Objects.term.SessionResult($"{ssh.Username}@{ssh.IP}: {ex.Message}");
                     break;
                 case 2:
                     var dialogResult = new ShellDialogWindow("Error", $"{ssh.Username}@{ssh.IP}: {ex.Message}", 1, false);
@@ -129,7 +106,6 @@ public static class ServerExtensions
         {
             if (TryConnect(ssh, window))
             {
-                //main.AddLog($"{ssh.Username}@{ssh.IP}: Connected Successfully");
                 ssh.Shell.Write(cmd + "\n");
                 ssh.Shell.Flush();
             }
@@ -139,10 +115,10 @@ public static class ServerExtensions
             switch (window)
             {
                 case 0:
-                    main.AddLog($"{ssh.Username}@{ssh.IP}: {ex.Message}");
+                    Objects.main.AddLog($"{ssh.Username}@{ssh.IP}: {ex.Message}");
                     break;
                 case 1:
-                    term.AddResult($"ERROR: {ssh.Username}@{ssh.IP} {ex.Message}");
+                    Objects.term.AddResult($"ERROR: {ssh.Username}@{ssh.IP} {ex.Message}");
                     break;
                 case 2:
                     var dialogResult = new ShellDialogWindow("Error", $"{ssh.Username}@{ssh.IP}: {ex.Message}", 1, false);
@@ -164,7 +140,7 @@ public static class ServerExtensions
                     switch (window)
                     {
                         case 0:
-                            main.AddLog($"{ssh.Username}@{ssh.IP}: {content}");
+                            Objects.main.AddLog($"{ssh.Username}@{ssh.IP}: {content}");
                             if (ScanHelper.carryon == 1)
                             {
                                 if (content.Contains("error"))
@@ -174,7 +150,7 @@ public static class ServerExtensions
                             }
                             break;
                         case 1:
-                            term.AddResult($"{ssh.Username}@{ssh.IP}: {content.Replace("\n","")}");
+                            Objects.term.AddResult($"{ssh.Username}@{ssh.IP}: {content.Replace("\n","")}");
                             break;
                     }                    
                 }
@@ -192,11 +168,10 @@ public static class ServerExtensions
             Directory.CreateDirectory("Clients");
         if (!Directory.Exists($"Clients/{hostname}"))
             Directory.CreateDirectory($"Clients/{hostname}");
-        scpClient.Connect();  // Connect to the remote system
+        scpClient.Connect();
 
         if (scpClient.IsConnected)
         {
-            // Download the remote file to the local file system
             using (var fileStream = new FileStream($"Clients/{hostname}/{localFileName}", FileMode.Create))
             {
                 scpClient.DownloadFile(remoteFilePath, fileStream);
@@ -209,7 +184,7 @@ public static class ServerExtensions
             Objects.ShowAlert("Failed", $"Unable to download {localFileName} from:\n -> {remoteFilePath}", 0);
         }
 
-        scpClient.Disconnect();  // Disconnect from the remote system
+        scpClient.Disconnect();
     }
 
     public static string SendFile(string hostname, string username, string password, string localFilePath, string remoteFilePath = "/tmp")

@@ -174,4 +174,7 @@
   <data name="ShellDirectoryViewerPage" xml:space="preserve">
     <value>Directory Viewer</value>
   </data>
+  <data name="F5PageTitle" xml:space="preserve">
+    <value>F5 Big IP Assessment</value>
+  </data>
 </root>

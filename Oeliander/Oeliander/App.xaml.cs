@@ -73,8 +73,9 @@ public partial class App : Application
         services.AddTransient<MainPage>();
 
         services.AddTransient<TerminalPage>();
-#if DIRVIEW
+#if WIP
         services.AddTransient<DirectoryViewPage>();
+        services.AddTransient<F5BigIPPage>();
 #endif
         services.AddTransient<SettingsPage>();
 
