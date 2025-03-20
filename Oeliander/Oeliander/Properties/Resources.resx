@@ -124,7 +124,7 @@
     <value>Settings</value>
   </data>
   <data name="SettingsPageAboutText" xml:space="preserve">
-    <value>This application is aimed at discovering, analyzing &amp; displaying the impact of vulnerabilities within MikroTik RouterOS.</value>
+    <value>This application is aimed at discovering, analyzing &amp; displaying vulnerabilities:</value>
   </data>
   <data name="SettingsPageAboutTitle" xml:space="preserve">
     <value>About this application</value>
@@ -157,7 +157,7 @@
     <value>Scanner</value>
   </data>
   <data name="MainPageTitle" xml:space="preserve">
-    <value>Oeliander MikroTik Exploitation Framework</value>
+    <value>Oeliander Exploitation Analysis Framework</value>
   </data>
   <data name="ShellGoBackButton" xml:space="preserve">
     <value>Go back</value>
@@ -169,12 +169,28 @@
     <value>Oeliander</value>
   </data>
   <data name="SettingsPageAboutText2" xml:space="preserve">
-    <value>Mainly the WinBox credential disclosure vulnerability.</value>
+    <value>- MikroTik WinBox Auth Bypass Credential Disclosure [CVE-2018-14847]
+- F5 Big-IP Remote Code Execution Vulnerability [CVE-2023-46747]
+- Juniper SRX Firewall Vulnerability [CVE-2023-36845]
+- Apache OFBiz RCE [CVE-2024-38856]
+- SpringShell Remote Code Execution Vulnearbility [CVE-2020-5405]
+- OpenFire Console Authentication Bypass Vulnerability [CVE-2023-3215]
+- Remote Unauthenticated Code Execution Vulnerability in OpenSSH server [CVE-2024-6387]
+- Kibana RCE [CVE-2019-7609]
+- VMWare Aria Operations for Networks (vRealize Network Insight) unauthenticated RCE [CVE-2023-20887] (UNIMPLEMENTED)
+- VMWare ESXi RCE Exploit [CVE2021-21974] (UNIMPLEMENTED)
+- Atlassian Bitbucket Data Center Deserialization Vulnerability [CVE-2022-26133] (UNIMPLEMENTED)
+- ConnectWise ScreenConnect-AuthBypass-RCE [CVE-2024-1708][CVE-2024-1709] (UNIMPLEMENTED)
+- Log4J [CVE-2021-45046] (UNIMPLEMENTED)
+- Apache Commons Text RCE [CVE-2022-42889] (UNIMPLEMENTED)</value>
   </data>
   <data name="ShellDirectoryViewerPage" xml:space="preserve">
     <value>Directory Viewer</value>
   </data>
-  <data name="F5PageTitle" xml:space="preserve">
-    <value>F5 Big IP Assessment</value>
+  <data name="ExploitScannerPageTitle" xml:space="preserve">
+    <value>Vulnerability Scanner</value>
+  </data>
+  <data name="ShellExploitScannerPage" xml:space="preserve">
+    <value>Vulnerability Scanner</value>
   </data>
 </root>

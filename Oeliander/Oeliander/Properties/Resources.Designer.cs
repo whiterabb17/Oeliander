@@ -70,16 +70,16 @@ namespace OelianderUI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to F5 Big IP Assessment.
+        ///   Looks up a localized string similar to Vulnerability Scanner.
         /// </summary>
-        public static string F5PageTitle {
+        public static string ExploitScannerPageTitle {
             get {
-                return ResourceManager.GetString("F5PageTitle", resourceCulture);
+                return ResourceManager.GetString("ExploitScannerPageTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Oeliander MikroTik Exploitation Framework.
+        ///   Looks up a localized string similar to Oeliander Exploitation Analysis Framework.
         /// </summary>
         public static string MainPageTitle {
             get {
@@ -88,7 +88,7 @@ namespace OelianderUI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This application is aimed at discovering, analyzing &amp; displaying the impact of vulnerabilities within MikroTik RouterOS..
+        ///   Looks up a localized string similar to This application is aimed at discovering, analyzing &amp; displaying vulnerabilities:.
         /// </summary>
         public static string SettingsPageAboutText {
             get {
@@ -97,7 +97,15 @@ namespace OelianderUI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mainly the WinBox credential disclosure vulnerability..
+        ///   Looks up a localized string similar to - MikroTik WinBox Auth Bypass Credential Disclosure [CVE-2018-14847]
+        ///- F5 Big-IP Remote Code Execution Vulnerability [CVE-2023-46747]
+        ///- Juniper SRX Firewall Vulnerability [CVE-2023-36845]
+        ///- Apache OFBiz RCE [CVE-2024-38856]
+        ///- SpringShell Remote Code Execution Vulnearbility [CVE-2020-5405]
+        ///- OpenFire Console Authentication Bypass Vulnerability [CVE-2023-3215]
+        ///- Remote Unauthenticated Code Execution Vulnerability in OpenSSH server [CVE-2024-6387]
+        ///- Kibana RCE [CVE-2019-7609]
+        ///- VMWare Aria Operations f [rest of string was truncated]&quot;;.
         /// </summary>
         public static string SettingsPageAboutText2 {
             get {
@@ -183,6 +191,15 @@ namespace OelianderUI.Properties {
         public static string ShellDirectoryViewerPage {
             get {
                 return ResourceManager.GetString("ShellDirectoryViewerPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vulnerability Scanner.
+        /// </summary>
+        public static string ShellExploitScannerPage {
+            get {
+                return ResourceManager.GetString("ShellExploitScannerPage", resourceCulture);
             }
         }
         

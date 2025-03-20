@@ -17,7 +17,7 @@ namespace OelianderUI.Helpers
         internal static MainPage main { get; set; }
         internal static TerminalPage term { get; set; }
         internal static DirectoryViewPage dirViewer { get; set; }
-        internal static F5BigIPPage f5Page { get;set; }
+        internal static ExploitScannerPage exploitScannerPage { get;set; }
         internal static Objects obj = new();
         internal static string CurrentUser { get; set; }
         internal static string CurrentIP { get; set; }

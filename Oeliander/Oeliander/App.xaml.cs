@@ -75,7 +75,7 @@ public partial class App : Application
         services.AddTransient<TerminalPage>();
 #if WIP
         services.AddTransient<DirectoryViewPage>();
-        services.AddTransient<F5BigIPPage>();
+        services.AddTransient<ExploitScannerPage>();
 #endif
         services.AddTransient<SettingsPage>();
 
