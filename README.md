@@ -7,6 +7,7 @@ A vulnearbility analysis framework with the ability to use shodan to gather targ
 ```
 
 # Vulnerability Scanner Integrations
+*Ported to C#*
 
 - MikroTik WinBox Auth Bypass Credential Disclosure [CVE-2018-14847]
 - F5 Big-IP Remote Code Execution Vulnerability [CVE-2023-46747]
