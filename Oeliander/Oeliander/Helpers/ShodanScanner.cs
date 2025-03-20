@@ -14,11 +14,12 @@ public class ShodanScanner
 {
     public static ShodanResponse sr = null;
     public static bool _continue = false;
+    public static string searchPattern { get; set; }
     public static void GetShodanSearch()
     {
         var version = ScanHelper._osVersion;
         using var wc = new HttpClient();
-        var json = wc.GetStringAsync($"https://api.shodan.io/shodan/host/search?key={MainPage.settings.Shodan_API_Key}&query=\"{MainPage.settings.Shodan_Pattern}\"+\"{version}\"").Result;
+        var json = wc.GetStringAsync($"https://api.shodan.io/shodan/host/search?key={MainPage.settings.Shodan_API_Key}&query=\"{searchPattern}\"+\"{version}\"").Result;
         //string json = wc.DownloadString($"https://api.shodan.io/shodan/host/search?key={MainPage.settings.Shodan_API_Key}&query=\"{MainPage.settings.Shodan_Pattern}\"+\"{version}\"");
         sr = JsonConvert.DeserializeObject<ShodanResponse>(json);
         _continue = true;

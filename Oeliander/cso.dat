@@ -1,0 +1,11 @@
+V1
+2:SaveResults,b
+2:outputFile,h
+2:outputFormat,X
+2:vulnerable,U
+2:notVulnerable,n
+2:case "csv":,B
+2:writer,o
+2:csv,O
+2:v,I
+2:,b_
